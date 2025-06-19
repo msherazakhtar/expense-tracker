@@ -1,9 +1,9 @@
 package com.expense.tracker.services;
 
-import com.expense.tracker.models.UsersORM;
+import com.expense.tracker.dtos.UserRecord;
 
 public interface UserService {
 
-    UsersORM registerUser(UsersORM user);
+    UserRecord registerUser(UserRecord user);
 
 }

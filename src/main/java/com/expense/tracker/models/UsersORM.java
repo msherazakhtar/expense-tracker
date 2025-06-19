@@ -2,6 +2,7 @@ package com.expense.tracker.models;
 
 import java.sql.Date;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -13,38 +14,47 @@ import jakarta.persistence.Table;
 public class UsersORM {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long user_id;
-    private String first_name;
-    private String last_name;
+    @Column(name = "user_id")
+    private Long userId;
+    @Column(name = "first_name")
+    private String firstName;
+    @Column(name = "last_name")
+    private String lastName;
+    @Column(name = "email")
     private String email;
+    @Column(name = "password")
     private String password;
-    private Boolean is_active;
-    private Boolean is_verified;
-    private Date date_created;
-    private String created_by;
+    @Column(name = "is_active")
+    private Boolean isActive;
+    @Column(name = "is_verified")
+    private Boolean isVerified;
+    @Column(name = "date_created")
+    private Date dateCreated;
+    @Column(name = "created_by")
+    private String createdBy;
 
-    public Long getUser_id() {
-        return user_id;
+    public Long getUserId() {
+        return userId;
     }
 
-    public void setUser_id(Long user_id) {
-        this.user_id = user_id;
+    public void setUserId(Long userId) {
+        this.userId = userId;
     }
 
-    public String getFirst_name() {
-        return first_name;
+    public String getFirstName() {
+        return firstName;
     }
 
-    public void setFirst_name(String first_name) {
-        this.first_name = first_name;
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
     }
 
-    public String getLast_name() {
-        return last_name;
+    public String getLastName() {
+        return lastName;
     }
 
-    public void setLast_name(String last_name) {
-        this.last_name = last_name;
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
     }
 
     public String getEmail() {
@@ -63,36 +73,36 @@ public class UsersORM {
         this.password = password;
     }
 
-    public Boolean getIs_active() {
-        return is_active;
+    public Boolean getIsActive() {
+        return isActive;
     }
 
-    public void setIs_active(Boolean is_active) {
-        this.is_active = is_active;
+    public void setIsActive(Boolean isActive) {
+        this.isActive = isActive;
     }
 
-    public Boolean getIs_verified() {
-        return is_verified;
+    public Boolean getIsVerified() {
+        return isVerified;
     }
 
-    public void setIs_verified(Boolean is_verified) {
-        this.is_verified = is_verified;
+    public void setIsVerified(Boolean isVerified) {
+        this.isVerified = isVerified;
     }
 
-    public Date getDate_created() {
-        return date_created;
+    public Date getDateCreated() {
+        return dateCreated;
     }
 
-    public void setDate_created(Date date_created) {
-        this.date_created = date_created;
+    public void setDateCreated(Date dateCreated) {
+        this.dateCreated = dateCreated;
     }
 
-    public String getCreated_by() {
-        return created_by;
+    public String getCreatedBy() {
+        return createdBy;
     }
 
-    public void setCreated_by(String created_by) {
-        this.created_by = created_by;
+    public void setCreatedBy(String createdBy) {
+        this.createdBy = createdBy;
     }
 
 }
