@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import com.expense.tracker.dtos.UserRecord;
 import com.expense.tracker.exceptions.MailConfigurationNotFoundException;
 import com.expense.tracker.exceptions.UserAlreadyExistException;
+import com.expense.tracker.exceptions.UserNotFoundException;
 import com.expense.tracker.models.MailConfigurationORM;
 import com.expense.tracker.models.UsersORM;
 import com.expense.tracker.repositories.MailConfigurationRepository;
@@ -41,6 +42,16 @@ public class UserServiceImpl implements UserService {
                 userORM.getVerificationCode());
         return UserUtility.mapUserORMToUserRecord(userORM);
 
+    }
+
+    @Override
+    public void verifyUser(String userId, String verificationCode) {
+        UsersORM user = userRepository.findById(Long.parseLong(userId))
+                .orElseThrow(
+                    () -> new UserNotFoundException("User not found...")
+                );
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'verifyUser'");
     }
 
 }

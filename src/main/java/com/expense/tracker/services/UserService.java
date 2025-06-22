@@ -6,4 +6,6 @@ public interface UserService {
 
     UserRecord registerUser(UserRecord user);
 
+    void verifyUser(String userId,String verificationCode);
+
 }

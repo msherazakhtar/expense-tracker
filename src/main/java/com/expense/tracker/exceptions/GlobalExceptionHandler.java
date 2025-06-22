@@ -22,4 +22,10 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.CONFLICT).body(
                 new ApiResponse<>(exception.getMessage(), "409", null, ResponseStatus.NOT_ALLOWED));
     }
+     @ExceptionHandler(UserNotFoundException.class)
+    public ResponseEntity<ApiResponse<String>> hanldeUserNotFound(UserNotFoundException exception) {
+        System.out.println("Exception Occurred : " + exception.getMessage());
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(
+                new ApiResponse<>(exception.getMessage(), "404", null, ResponseStatus.NOT_ALLOWED));
+    }
 }

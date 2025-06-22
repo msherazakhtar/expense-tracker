@@ -27,7 +27,7 @@ public class UsersORM {
     @Column(name = "is_active")
     private Boolean isActive;
     @Column(name = "is_verified")
-    private Boolean isVerified;
+    private Boolean isVerified = false;
     @Column(name = "date_created")
     private Date dateCreated;
     @Column(name = "created_by")
