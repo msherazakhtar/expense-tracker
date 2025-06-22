@@ -32,6 +32,8 @@ public class UsersORM {
     private Date dateCreated;
     @Column(name = "created_by")
     private String createdBy;
+    @Column(name = "verification_code")
+    private String verificationCode;
 
     public Long getUserId() {
         return userId;
@@ -103,6 +105,14 @@ public class UsersORM {
 
     public void setCreatedBy(String createdBy) {
         this.createdBy = createdBy;
+    }
+
+    public String getVerificationCode() {
+        return verificationCode;
+    }
+
+    public void setVerificationCode(String verificationCode) {
+        this.verificationCode = verificationCode;
     }
 
 }

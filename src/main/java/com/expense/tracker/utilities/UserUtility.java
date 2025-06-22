@@ -21,4 +21,5 @@ public class UserUtility {
                 userOrm.getPassword(), userOrm.getIsActive(), userOrm.getIsVerified());
     }
 
+
 }

@@ -16,5 +16,10 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.CONFLICT).body(
                 new ApiResponse<>(exception.getMessage(), "409", null, ResponseStatus.NOT_ALLOWED));
     }
-
+ @ExceptionHandler(MailConfigurationNotFoundException.class)
+    public ResponseEntity<ApiResponse<String>> handleMailConfiguration(MailConfigurationNotFoundException exception) {
+        System.out.println("Exception Occurred : " + exception.getMessage());
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(
+                new ApiResponse<>(exception.getMessage(), "409", null, ResponseStatus.NOT_ALLOWED));
+    }
 }
