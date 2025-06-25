@@ -2,6 +2,7 @@ package com.expense.tracker.services;
 
 import java.util.Optional;
 
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.expense.tracker.dtos.UserRecord;
@@ -37,6 +38,7 @@ public class UserServiceImpl implements UserService {
                 .orElseThrow(
                         () -> new MailConfigurationNotFoundException("Mail Configuration for your server not found")));
         userORM.setVerificationCode(GeneralUtilities.generateVerificationCode());
+        userORM.setPassword(new BCryptPasswordEncoder().encode(userORM.getPassword()));
         userORM = userRepository.save(userORM);
         EmailUtility.sendUserVerificationEmail(mailConfiguration.get(), userORM.getEmail(),
                 userORM.getVerificationCode());
@@ -48,8 +50,7 @@ public class UserServiceImpl implements UserService {
     public void verifyUser(String userId, String verificationCode) {
         UsersORM user = userRepository.findById(Long.parseLong(userId))
                 .orElseThrow(
-                    () -> new UserNotFoundException("User not found...")
-                );
+                        () -> new UserNotFoundException("User not found..."));
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'verifyUser'");
     }
