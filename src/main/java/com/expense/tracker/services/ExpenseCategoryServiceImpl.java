@@ -1,0 +1,50 @@
+package com.expense.tracker.services;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import org.springframework.stereotype.Service;
+
+import com.expense.tracker.dtos.ExpenseCategoryRecord;
+import com.expense.tracker.models.ExpenseCategoryORM;
+import com.expense.tracker.repositories.ExpenseCategoryRepository;
+import com.expense.tracker.utilities.MappingUtility;
+
+@Service
+public class ExpenseCategoryServiceImpl implements ExpenseCategoryService {
+    ExpenseCategoryRepository expenseCategoryRepository;
+
+    public ExpenseCategoryServiceImpl(ExpenseCategoryRepository expenseCategoryRepository) {
+        this.expenseCategoryRepository = expenseCategoryRepository;
+    }
+
+    @Override
+    public ExpenseCategoryRecord addExpenseCategory(ExpenseCategoryRecord expenseCategoryRecord) {
+        ExpenseCategoryORM expenseCategoryORM = MappingUtility.mapExpenseRecordToCategoryORM(expenseCategoryRecord);
+        expenseCategoryORM = expenseCategoryRepository.save(expenseCategoryORM);
+        return MappingUtility.mapExpenseCategoryORMToRecord(expenseCategoryORM);
+    }
+
+    @Override
+    public List<ExpenseCategoryRecord> getExpenseCategories(String userId) {
+        List<ExpenseCategoryORM> expenseCategoryORMs = expenseCategoryRepository.findAllByUserId(Long.parseLong(userId));
+        List<ExpenseCategoryRecord> expenseCategoryRecords = new ArrayList<>();
+        for (ExpenseCategoryORM category : expenseCategoryORMs) {
+            expenseCategoryRecords.add(MappingUtility.mapExpenseCategoryORMToRecord(category));
+        }
+        return expenseCategoryRecords;
+    }
+
+    @Override
+    public String deleteExpenseCategories(List<ExpenseCategoryRecord> expenseCategoryRecords) {
+        List<ExpenseCategoryORM> expenseCategoryORMs =  new ArrayList<>();
+        for(ExpenseCategoryRecord record : expenseCategoryRecords)
+        {
+            expenseCategoryORMs.add(MappingUtility.mapExpenseRecordToCategoryORM(record));
+        }
+        expenseCategoryRepository.deleteAll(expenseCategoryORMs);
+        return "Categories Deleted";
+
+    }
+
+}
