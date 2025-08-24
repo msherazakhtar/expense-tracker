@@ -38,7 +38,6 @@ public class MappingUtility {
         userOrm.setFirstName(userProfileRecord.firstName());
         userOrm.setLastName(userProfileRecord.lastName());
         userOrm.setEmail(userProfileRecord.email());
-        userOrm.setPassword(userProfileRecord.password());
         userOrm.setIsActive(true);
         userOrm.setIsVerified(userProfileRecord.isVerified());
         return userOrm;

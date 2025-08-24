@@ -4,6 +4,7 @@ import java.util.Optional;
 
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.expense.tracker.dtos.UserProfileRecord;
 import com.expense.tracker.dtos.UserRecord;
@@ -15,6 +16,7 @@ import com.expense.tracker.models.UsersORM;
 import com.expense.tracker.repositories.MailConfigurationRepository;
 import com.expense.tracker.repositories.UserRepository;
 import com.expense.tracker.utilities.EmailUtility;
+import com.expense.tracker.utilities.FileUtils;
 import com.expense.tracker.utilities.GeneralUtilities;
 import com.expense.tracker.utilities.MappingUtility;
 
@@ -30,6 +32,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserRecord registerUser(UserRecord user) {
+    
         if (userRepository.existsByEmail(user.email())) {
             throw new UserAlreadyExistException("User with email : " + user.email() + " already exists.");
         }
@@ -69,10 +72,25 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserProfileRecord updateUserProfile(UserProfileRecord userProfileRecord) {
         UsersORM usersORM = MappingUtility.mapUserProfileRecordToORM(userProfileRecord);
-        usersORM.setPassword(new BCryptPasswordEncoder().encode(usersORM.getPassword()));
-        usersORM =  userRepository.save(usersORM);
+        if (usersORM.getPassword()!=null && 
+        !usersORM.getPassword().equals("")) {
+            usersORM.setPassword(new BCryptPasswordEncoder().encode(usersORM.getPassword()));
+        }
+        usersORM = userRepository.save(usersORM);
         return MappingUtility.mapUserORMToUserProfile(usersORM);
 
+    }
+
+    @Override
+    public UserProfileRecord uploadProfilePicture(String userId, MultipartFile profilePicture) {
+        //finding the user by ID
+        UsersORM usersORM = userRepository.findById(Long.parseLong(userId)).orElseThrow(
+                () -> new UserNotFoundException("User Not Found"));
+        //uploading the profile picture and getting the URL
+        String profilePictureUrl = FileUtils.uploadFile(profilePicture);
+        usersORM.setProfilePictureUrl(profilePictureUrl);
+        usersORM = userRepository.save(usersORM);
+        return MappingUtility.mapUserORMToUserProfile(usersORM);
     }
 
 }

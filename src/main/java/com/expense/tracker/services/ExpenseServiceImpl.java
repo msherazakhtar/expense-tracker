@@ -1,5 +1,8 @@
 package com.expense.tracker.services;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 
 import com.expense.tracker.dtos.ExpenseRecord;
@@ -21,5 +24,15 @@ public class ExpenseServiceImpl implements ExpenseService {
         expenseORM = expenseRepository.save(expenseORM);
         return MappingUtility.mapExpenseORMToRecord(expenseORM);
     }
+
+	@Override
+	public List<ExpenseRecord> getExpenseByUserId(Long userId) {
+		List<ExpenseORM> lstExpenseORM = expenseRepository.findByUserId(userId);
+		List<ExpenseRecord> lstExpenseRecord = new ArrayList<ExpenseRecord>();
+		for(ExpenseORM expense : lstExpenseORM) {
+			lstExpenseRecord.add(MappingUtility.mapExpenseORMToRecord(expense));
+		}
+		return lstExpenseRecord;
+	}
 
 }

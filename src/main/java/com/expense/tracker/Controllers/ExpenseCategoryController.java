@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.expense.tracker.dtos.ApiResponse;
 import com.expense.tracker.dtos.ExpenseCategoryRecord;
 import com.expense.tracker.enums.ResponseStatus;
+import com.expense.tracker.models.ExpenseCategoryORM;
 import com.expense.tracker.services.ExpenseCategoryService;
 
 
@@ -52,5 +54,18 @@ public class ExpenseCategoryController {
                 responseMessage,
                 ResponseStatus.SUCCESS);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).body(apiResponse);
+    }
+
+    @PutMapping("/updateExpenseCategory")
+    public ResponseEntity<ApiResponse<ExpenseCategoryRecord>> updateExpenseCategory(@RequestBody ExpenseCategoryORM expenseCategoryORM)
+    {
+        // Assuming you have a method in the service to update the category
+        ExpenseCategoryRecord updatedCategory = expenseCategoryService.updateExpenseCategory(expenseCategoryORM);
+        ApiResponse<ExpenseCategoryRecord> apiResponse = new ApiResponse<>(
+                "Expense Category Updated.",
+                "200",
+                updatedCategory,
+                ResponseStatus.SUCCESS);
+        return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
     }
 }

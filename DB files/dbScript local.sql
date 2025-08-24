@@ -129,23 +129,107 @@ delete from users where email = 'sheraz321089@gmail.com'
 
 select * from users
 
-
+update users set email = 'test@test.com'
 
 update users set password = '$2a$10$qUi9VZ.AgvyHl36Ty/XYvOu00IRBKdtnam3/vVJtniqLhwNQvafR6'
+							"$2a$10$dC7oY4zMKXADLs45O.bd/eS51sZAaKiS5DVJPMThn/0VNIzDYrH3S"
 
-
+drop table expenses
 CREATE TABLE expenses (
-    id BIGSERIAL PRIMARY KEY,
-    title VARCHAR(255) NOT NULL,
-    amount DECIMAL(10, 2) NOT NULL CHECK (amount >= 0),
-    category_id BIGINT,
-    created_by BIGINT NOT NULL,
+    id bigint  generated always as identity,
+    title VARCHAR(255) ,
+	details varchar(500) ,
+    amount DECIMAL(10, 2),
+    category varchar(100),
+	user_id bigint,
+    created_by varchar(100) NULL,
     is_group BOOLEAN DEFAULT FALSE,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-
-    CONSTRAINT fk_expense_category FOREIGN KEY (category_id) REFERENCES categories(id) ON DELETE SET NULL,
-    CONSTRAINT fk_expense_user FOREIGN KEY (created_by) REFERENCES users(id) ON DELETE CASCADE
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+
+
+select * from expenses
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+select * 
+from users
+Where user_id >2 and is_active = TRUE and is_verified = TRUE
+
+
+
+
+CREATE OR REPLACE FUNCTION fnPageinationExample(
+    pageNumber INTEGER,
+    pageSize INTEGER
+)
+RETURNS TABLE (
+    user_id BIGINT,
+    first_name VARCHAR,
+    last_name VARCHAR,
+    email VARCHAR,
+    is_active BOOLEAN,
+    is_verified BOOLEAN,
+    date_created TIMESTAMP,
+    total_pages INTEGER
+) 
+LANGUAGE plpgsql
+AS $$
+DECLARE
+    total_count BIGINT;
+BEGIN
+    SELECT COUNT(*) INTO total_count FROM users;
+
+   
+    RETURN QUERY
+    SELECT 
+        u.user_id,
+        u.first_name,
+        u.last_name,
+        u.email,
+        u.is_active,
+        u.is_verified,
+        u.date_created,
+        CEIL(total_count::NUMERIC / pageSize)::INT AS total_pages
+    FROM users u
+    ORDER BY u.user_id
+    LIMIT pageSize 
+    OFFSET (pageNumber - 1) * pageSize;
+END;
+$$;
+
+
+
+
+select fnPageinationExample (1,10)
+
+
+select * from users
+
+select * from expenses
+
+
+
 
 
 

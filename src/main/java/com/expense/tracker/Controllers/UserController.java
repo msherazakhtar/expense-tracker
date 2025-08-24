@@ -4,7 +4,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.expense.tracker.dtos.ApiResponse;
 import com.expense.tracker.dtos.UserProfileRecord;
@@ -18,11 +20,25 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
-@RestController
+@RestController // this is controller
 @RequestMapping("/users")
 public class UserController {
     @Autowired
     UserService userService;
+
+
+//Controller -> Service -> Repository -> ORM -> Database  = operation performed
+
+
+
+
+//localhost:5555/users/sayHello
+    @GetMapping("/sayHello")
+    public String sayHello()
+    {
+        return "Hello Developer...";
+    }
+
 
     @PostMapping("/register")
     public ResponseEntity<ApiResponse<UserRecord>> registerUser(@RequestBody UserRecord userRecord) {
@@ -65,4 +81,16 @@ public class UserController {
        
         return ResponseEntity.status(HttpStatus.OK).body(userProfileRecordUpdated);
     }
+
+     @PutMapping("/uploadProfilePicture/{userId}")
+    public ResponseEntity<UserProfileRecord> uploadProfilePicture(
+            @PathVariable(name = "userId") String userId,
+            @RequestParam("profilePicture") MultipartFile profilePicture
+    ) {
+       UserProfileRecord userProfileRecordUpdated= userService.uploadProfilePicture(userId, profilePicture);
+       
+        return ResponseEntity.status(HttpStatus.OK).body(userProfileRecordUpdated);
+    }
+
+
 }

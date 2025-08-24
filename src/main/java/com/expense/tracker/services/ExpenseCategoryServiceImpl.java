@@ -47,4 +47,11 @@ public class ExpenseCategoryServiceImpl implements ExpenseCategoryService {
 
     }
 
+    @Override
+    public ExpenseCategoryRecord updateExpenseCategory(ExpenseCategoryORM expenseCategoryORM) {
+        ExpenseCategoryORM updatedCategory = expenseCategoryRepository.save(expenseCategoryORM);
+        return MappingUtility.mapExpenseCategoryORMToRecord(updatedCategory);
+    }
+
+
 }

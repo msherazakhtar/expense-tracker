@@ -1,5 +1,7 @@
 package com.expense.tracker.services;
 
+import org.springframework.web.multipart.MultipartFile;
+
 import com.expense.tracker.dtos.UserProfileRecord;
 import com.expense.tracker.dtos.UserRecord;
 
@@ -12,5 +14,7 @@ public interface UserService {
     UserProfileRecord getUserProfile(String userId);
 
     UserProfileRecord updateUserProfile(UserProfileRecord userProfileRecord);
+
+    UserProfileRecord uploadProfilePicture(String userId, MultipartFile profilePicture);
 
 }
