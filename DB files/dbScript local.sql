@@ -343,7 +343,7 @@ Create table expense_main(
 )
 
 
-
+select * from expenses
 
 
 

@@ -6,6 +6,8 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import com.expense.tracker.dtos.ExpenseRecord;
+import com.expense.tracker.exceptions.ExpenseNotFoundException;
+import com.expense.tracker.exceptions.UserNotFoundException;
 import com.expense.tracker.models.ExpenseORM;
 import com.expense.tracker.repositories.ExpenseRepository;
 import com.expense.tracker.utilities.MappingUtility;
@@ -24,7 +26,7 @@ public class ExpenseServiceImpl implements ExpenseService {
         expenseORM = expenseRepository.save(expenseORM);
         return MappingUtility.mapExpenseORMToRecord(expenseORM);
     }
-
+  
 	@Override
 	public List<ExpenseRecord> getExpenseByUserId(Long userId) {
 		List<ExpenseORM> lstExpenseORM = expenseRepository.findByUserId(userId);
@@ -34,5 +36,17 @@ public class ExpenseServiceImpl implements ExpenseService {
 		}
 		return lstExpenseRecord;
 	}
+
+	@Override
+	public String deleteSingleExpense(Long expenseId) {
+		ExpenseORM expenseToDelete= expenseRepository.findById(expenseId).orElseThrow(
+				 () -> new ExpenseNotFoundException("Expense not found..."));
+				;
+		expenseRepository.delete(expenseToDelete);
+		return "Expense Deleted Successfuly";
+		
+	}
+
+	
 
 }

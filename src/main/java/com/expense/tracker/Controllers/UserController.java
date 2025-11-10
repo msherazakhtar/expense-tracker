@@ -20,19 +20,12 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
-@RestController // this is controller
+@RestController 
 @RequestMapping("/users")
 public class UserController {
     @Autowired
     UserService userService;
 
-
-//Controller -> Service -> Repository -> ORM -> Database  = operation performed
-
-
-
-
-//localhost:5555/users/sayHello
     @GetMapping("/sayHello")
     public String sayHello()
     {
@@ -88,7 +81,6 @@ public class UserController {
             @RequestParam("profilePicture") MultipartFile profilePicture
     ) {
        UserProfileRecord userProfileRecordUpdated= userService.uploadProfilePicture(userId, profilePicture);
-       
         return ResponseEntity.status(HttpStatus.OK).body(userProfileRecordUpdated);
     }
 

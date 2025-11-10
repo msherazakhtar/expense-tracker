@@ -28,4 +28,11 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.CONFLICT).body(
                 new ApiResponse<>(exception.getMessage(), "404", null, ResponseStatus.NOT_ALLOWED));
     }
+     
+     @ExceptionHandler(ExpenseNotFoundException.class)
+     public ResponseEntity<ApiResponse<String>> handExpenseNotFound(ExpenseNotFoundException exception) {
+         System.out.println("Exception Occurred : " + exception.getMessage());
+         return ResponseEntity.status(HttpStatus.CONFLICT).body(
+                 new ApiResponse<>(exception.getMessage(), "404", null, ResponseStatus.NOT_ALLOWED));
+     }
 }

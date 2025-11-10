@@ -10,4 +10,7 @@ public interface ExpenseService {
 
 	List<ExpenseRecord> getExpenseByUserId(Long userId);
 
+	String deleteSingleExpense(Long expenseId);
+
+
 }

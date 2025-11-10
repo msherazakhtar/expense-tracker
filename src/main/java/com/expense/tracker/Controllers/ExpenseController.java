@@ -13,9 +13,11 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 @RestController
@@ -29,13 +31,14 @@ public class ExpenseController {
             @RequestBody ExpenseRecord expenseRecord) {
         expenseRecord = expenseService.addExpense(expenseRecord);
         ApiResponse<ExpenseRecord> apiResponse = new ApiResponse<>(
-                "Expense",
+                "Expense",	
                 "201",
                 expenseRecord,
                 ResponseStatus.SUCCESS);
         return ResponseEntity.status(HttpStatus.CREATED).body(apiResponse);
 
     }
+
       @GetMapping("/getExpenseByUserId/{userId}")
      public ResponseEntity<List<ExpenseRecord>> getExpenseByUserId(
              @PathVariable("userId") Long userId) {
@@ -43,5 +46,17 @@ public class ExpenseController {
          return ResponseEntity.status(HttpStatus.CREATED).body(expenseRecord);
 
     }
+      @DeleteMapping("/deleteSingleExpense/{expenseId}")
+      public ResponseEntity<ApiResponse<String>> deleteSingleExpense(
+              @PathVariable("expenseId") Long expenseId) {
+          String responseMessage = expenseService.deleteSingleExpense(expenseId);
+          ApiResponse<String> apiResponse = new ApiResponse<>(
+                  "Expense",	
+                  "201",
+                  responseMessage,
+                  ResponseStatus.SUCCESS);
+          return ResponseEntity.status(HttpStatus.CREATED).body(apiResponse);
+     }
+
 
 }
