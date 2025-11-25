@@ -25,7 +25,8 @@ public class UsersORM {
     private String lastName;
 
     // @Column(name = "email")
-    // @Size(min = 3, max = 20, message = "Username must be between 3 and 20 characters")
+    // @Size(min = 3, max = 20, message = "Username must be between 3 and 20
+    // characters")
     // @NotBlank(message = "Username is required")
     // @Email(message = "Email should be valid")
     private String email;
@@ -36,14 +37,18 @@ public class UsersORM {
     private Boolean isActive;
     @Column(name = "is_verified")
     private Boolean isVerified = false;
-    @Column(name = "date_created")
-    private Date dateCreated;
-    @Column(name = "created_by")
-    private String createdBy;
     @Column(name = "verification_code")
     private String verificationCode;
     @Column(name = "profile_pic_url")
     private String profilePictureUrl;
+    @Column(name = "date_created")
+    private Date createdAt;
+    @Column(name = "created_by")
+    private String createdBy;
+    @Column(name = "date_modified")
+    private Date modifiedAt;
+    @Column(name = "modified_by")
+    private String modifiedBy;
 
     public Long getUserId() {
         return userId;
@@ -101,13 +106,7 @@ public class UsersORM {
         this.isVerified = isVerified;
     }
 
-    public Date getDateCreated() {
-        return dateCreated;
-    }
-
-    public void setDateCreated(Date dateCreated) {
-        this.dateCreated = dateCreated;
-    }
+  
 
     public String getCreatedBy() {
         return createdBy;
@@ -124,11 +123,39 @@ public class UsersORM {
     public void setVerificationCode(String verificationCode) {
         this.verificationCode = verificationCode;
     }
+
     public String getProfilePictureUrl() {
         return profilePictureUrl;
     }
+
     public void setProfilePictureUrl(String profilePictureUrl) {
         this.profilePictureUrl = profilePictureUrl;
     }
+
+    public Date getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(Date createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public Date getModifiedAt() {
+        return modifiedAt;
+    }
+
+    public void setModifiedAt(Date modifiedAt) {
+        this.modifiedAt = modifiedAt;
+    }
+
+    public String getModifiedBy() {
+        return modifiedBy;
+    }
+
+    public void setModifiedBy(String modifiedBy) {
+        this.modifiedBy = modifiedBy;
+    }
+
+    
 
 }

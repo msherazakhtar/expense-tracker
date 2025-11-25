@@ -9,8 +9,12 @@ Create table users(
 	is_active Boolean DEFAULT True,
 	is_verified Boolean DEFAULT FALSE,
 	verification_code varchar(6),
+	profile_pic_url varchar(200),
+	is_deleted boolean default false,
 	date_created TIMESTAMP default CURRENT_TIMESTAMP,
-	created_by varchar(100)
+	created_by varchar(100),
+	modified_by varchar(100),
+	date_modified TIMESTAMP default CURRENT_TIMESTAMP
 )
 select * from users
 
@@ -140,15 +144,18 @@ update users set password = '$2a$10$qUi9VZ.AgvyHl36Ty/XYvOu00IRBKdtnam3/vVJtniqL
 
 drop table expenses
 CREATE TABLE expenses (
-    id bigint  generated always as identity,
+    expense_id bigint  generated always as identity,
     title VARCHAR(255) ,
 	details varchar(500) ,
     amount DECIMAL(10, 2),
     category varchar(100),
 	user_id bigint,
-    created_by varchar(100) NULL,
     is_group BOOLEAN DEFAULT FALSE,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+	is_deleted boolean default false,
+    date_created TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+	created_by varchar(100),
+	date_modified timestamp default current_timestamp,
+	modified_by varchar(100)
 );
 
 
@@ -157,10 +164,20 @@ select * from expenses
 
 
 
+drop table categories
 
 
-
-
+CREATE TABLE categories (
+    category_id bigint  generated always as identity,
+    name VARCHAR(255) ,
+	user_id bigint ,
+    is_global Boolean default false,
+	is_deleted boolean default false,
+    date_created TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+	created_by varchar(100),
+	date_modified timestamp default current_timestamp,
+	modified_by varchar(100)
+);
 
 
 
@@ -330,21 +347,10 @@ update users set password = '$2a$10$nlK8P1aIgxvdFcDCR1VVS.dVDlrqi6HKq1AUSNtvOa1M
 
 
 
-
-
-Create table expense_main(
-	expense_id bigint generated always as identity,
-	amount money,
-	details varchar,
-	type varchar,
-	payment_date varchar,
-	mail_server varchar,
-	is_active boolean
-)
-
-
 select * from expenses
-
+select * from categories
+select * from mail_configuration
+select * from users
 
 
 

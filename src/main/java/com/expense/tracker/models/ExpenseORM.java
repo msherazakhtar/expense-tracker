@@ -10,26 +10,24 @@ public class ExpenseORM {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "expense_id")
     private Long id;
-
     private String title;
-
     private String details;
-
     private BigDecimal amount;
-
     private String category;
-
-    @Column(name = "created_by")
-    private String createdBy;
     @Column(name = "user_id")
     private Long userId;
-
     @Column(name = "is_group")
     private Boolean isGroup = false;
-
-    @Column(name = "created_at")
+    @Column(name = "date_created")
     private LocalDateTime createdAt = LocalDateTime.now();
+    @Column(name = "created_by")
+    private String createdBy;
+    @Column(name = "date_modified")
+    private LocalDateTime modifiedAt = LocalDateTime.now();
+    @Column(name = "modified_by")
+    private String modifiedBy;
 
     // Getters and Setters
     public Long getId() {
@@ -102,6 +100,22 @@ public class ExpenseORM {
 
     public void setUserId(Long userId) {
         this.userId = userId;
+    }
+
+    public LocalDateTime getModifiedAt() {
+        return modifiedAt;
+    }
+
+    public void setModifiedAt(LocalDateTime modifiedAt) {
+        this.modifiedAt = modifiedAt;
+    }
+
+    public String getModifiedBy() {
+        return modifiedBy;
+    }
+
+    public void setModifiedBy(String modifiedBy) {
+        this.modifiedBy = modifiedBy;
     }
 
 }

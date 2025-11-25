@@ -1,13 +1,5 @@
 package com.expense.tracker.Controllers;
 
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
-import com.expense.tracker.dtos.ApiResponse;
-import com.expense.tracker.dtos.ExpenseRecord;
-import com.expense.tracker.enums.ResponseStatus;
-import com.expense.tracker.services.ExpenseService;
-
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,8 +9,17 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.expense.tracker.dtos.ApiResponse;
+import com.expense.tracker.dtos.ExpenseRecord;
+import com.expense.tracker.dtos.SearchCriteria;
+import com.expense.tracker.enums.ResponseStatus;
+import com.expense.tracker.models.ExpenseSummaryORM;
+import com.expense.tracker.services.ExpenseService;
 
 @RestController
 @RequestMapping("/expense")
@@ -39,11 +40,31 @@ public class ExpenseController {
 
     }
 
-      @GetMapping("/getExpenseByUserId/{userId}")
+//      @PostMapping("/updateExpense")
+//     public ResponseEntity<ApiResponse<ExpenseRecord>> addExpense(
+//             @RequestBody ExpenseRecord expenseRecord) {
+//         expenseRecord = expenseService.addExpense(expenseRecord);
+//         ApiResponse<ExpenseRecord> apiResponse = new ApiResponse<>(
+//                 "Expense",	
+//                 "201",
+//                 expenseRecord,
+//                 ResponseStatus.SUCCESS);
+//         return ResponseEntity.status(HttpStatus.CREATED).body(apiResponse);
+
+//     }
+
+      @GetMapping("/getExpenseByUserId")
      public ResponseEntity<List<ExpenseRecord>> getExpenseByUserId(
-             @PathVariable("userId") Long userId) {
-         List<ExpenseRecord> expenseRecord = expenseService.getExpenseByUserId(userId);
-         return ResponseEntity.status(HttpStatus.CREATED).body(expenseRecord);
+            @RequestBody SearchCriteria requestCriteria) {
+         List<ExpenseRecord> expenseRecord = expenseService.getExpenseByUserId(requestCriteria);
+         return ResponseEntity.status(HttpStatus.OK).body(expenseRecord);
+
+    }
+      @GetMapping("/getExpenseSummary")
+     public ResponseEntity<List<ExpenseSummaryORM>> getExpenseSummary(
+            @RequestBody SearchCriteria requestCriteria) {
+         List<ExpenseSummaryORM> expenseSummary = expenseService.getExpenseSummary(requestCriteria);
+         return ResponseEntity.status(HttpStatus.OK).body(expenseSummary);
 
     }
       @DeleteMapping("/deleteSingleExpense/{expenseId}")
