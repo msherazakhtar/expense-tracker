@@ -3,9 +3,11 @@ FROM eclipse-temurin:21-jdk AS builder
 WORKDIR /app
 
 COPY mvnw .
+RUN chmod +x mvnw
 COPY .mvn .mvn
 COPY pom.xml .
 RUN ./mvnw dependency:go-offline -B
+
 
 COPY src src
 RUN ./mvnw clean package -DskipTests
