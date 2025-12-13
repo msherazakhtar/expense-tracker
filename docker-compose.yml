@@ -2,28 +2,28 @@ version: '3.8'
 services:
   postgres:
     image: postgres:15
-    container_name: expense-db
+    container_name: expense_trackerDB
     environment:
-      POSTGRES_DB: expense_tracker
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: 1234
+      POSTGRES_DB: split_house
+      POSTGRES_USER: test
+      POSTGRES_PASSWORD: 123
     ports:
       - "5432:5432"
     volumes:
       - pgdata:/var/lib/postgresql/data
 
   app:
-    image: app-docker-image
-    container_name: expense-app
+    image: splitHouse-api_image
+    container_name: splitHouse-api
     ports:
       - "5555:5555"
 
     depends_on:
       - postgres
     environment:
-      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/expense_tracker
-      SPRING_DATASOURCE_USERNAME: postgres
-      SPRING_DATASOURCE_PASSWORD: 1234
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/split_house
+      SPRING_DATASOURCE_USERNAME: test
+      SPRING_DATASOURCE_PASSWORD: 123
       SPRING_JPA_HIBERNATE_DDL_AUTO: update
 
 volumes:

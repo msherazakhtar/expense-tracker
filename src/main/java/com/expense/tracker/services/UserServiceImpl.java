@@ -37,15 +37,15 @@ public class UserServiceImpl implements UserService {
             throw new UserAlreadyExistException("User with email : " + user.email() + " already exists.");
         }
         UsersORM userORM = MappingUtility.mapUserRecordToORM(user);
-        Optional<MailConfigurationORM> mailConfiguration = Optional.ofNullable(mailConfigurationRepository
-                .findBymailServer("Gmail")
-                .orElseThrow(
-                        () -> new MailConfigurationNotFoundException("Mail Configuration for your server not found")));
-        userORM.setVerificationCode(GeneralUtilities.generateVerificationCode());
+        // Optional<MailConfigurationORM> mailConfiguration = Optional.ofNullable(mailConfigurationRepository
+        //         .findBymailServer("Gmail")
+        //         .orElseThrow(
+        //                 () -> new MailConfigurationNotFoundException("Mail Configuration for your server not found")));
+        // userORM.setVerificationCode(GeneralUtilities.generateVerificationCode());
         userORM.setPassword(new BCryptPasswordEncoder().encode(userORM.getPassword()));
         userORM = userRepository.save(userORM);
-        EmailUtility.sendUserVerificationEmail(mailConfiguration.get(), userORM.getEmail(),
-                userORM.getVerificationCode());
+        // EmailUtility.sendUserVerificationEmail(mailConfiguration.get(), userORM.getEmail(),
+        //         userORM.getVerificationCode());
         return MappingUtility.mapUserORMToUserRecord(userORM);
 
     }

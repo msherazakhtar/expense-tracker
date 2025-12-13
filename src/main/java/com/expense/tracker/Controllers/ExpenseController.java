@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.expense.tracker.dtos.ApiResponse;
@@ -33,7 +32,6 @@ public class ExpenseController {
         expenseRecord = expenseService.addExpense(expenseRecord);
         ApiResponse<ExpenseRecord> apiResponse = new ApiResponse<>(
                 "Expense",	
-                "201",
                 expenseRecord,
                 ResponseStatus.SUCCESS);
         return ResponseEntity.status(HttpStatus.CREATED).body(apiResponse);
@@ -73,7 +71,6 @@ public class ExpenseController {
           String responseMessage = expenseService.deleteSingleExpense(expenseId);
           ApiResponse<String> apiResponse = new ApiResponse<>(
                   "Expense",	
-                  "201",
                   responseMessage,
                   ResponseStatus.SUCCESS);
           return ResponseEntity.status(HttpStatus.CREATED).body(apiResponse);

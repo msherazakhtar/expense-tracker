@@ -14,25 +14,27 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ApiResponse<String>> handleUserExists(UserAlreadyExistException exception) {
         System.out.println("Exception Occurred : " + exception.getMessage());
         return ResponseEntity.status(HttpStatus.CONFLICT).body(
-                new ApiResponse<>(exception.getMessage(), "409", null, ResponseStatus.NOT_ALLOWED));
+                new ApiResponse<>(exception.getMessage(), null, ResponseStatus.NOT_ALLOWED));
     }
- @ExceptionHandler(MailConfigurationNotFoundException.class)
+
+    @ExceptionHandler(MailConfigurationNotFoundException.class)
     public ResponseEntity<ApiResponse<String>> handleMailConfiguration(MailConfigurationNotFoundException exception) {
         System.out.println("Exception Occurred : " + exception.getMessage());
         return ResponseEntity.status(HttpStatus.CONFLICT).body(
-                new ApiResponse<>(exception.getMessage(), "409", null, ResponseStatus.NOT_ALLOWED));
+                new ApiResponse<>(exception.getMessage(), null, ResponseStatus.NOT_ALLOWED));
     }
-     @ExceptionHandler(UserNotFoundException.class)
+
+    @ExceptionHandler(UserNotFoundException.class)
     public ResponseEntity<ApiResponse<String>> hanldeUserNotFound(UserNotFoundException exception) {
         System.out.println("Exception Occurred : " + exception.getMessage());
         return ResponseEntity.status(HttpStatus.CONFLICT).body(
-                new ApiResponse<>(exception.getMessage(), "404", null, ResponseStatus.NOT_ALLOWED));
+                new ApiResponse<>(exception.getMessage(), null, ResponseStatus.NOT_ALLOWED));
     }
-     
-     @ExceptionHandler(ExpenseNotFoundException.class)
-     public ResponseEntity<ApiResponse<String>> handExpenseNotFound(ExpenseNotFoundException exception) {
-         System.out.println("Exception Occurred : " + exception.getMessage());
-         return ResponseEntity.status(HttpStatus.CONFLICT).body(
-                 new ApiResponse<>(exception.getMessage(), "404", null, ResponseStatus.NOT_ALLOWED));
-     }
+
+    @ExceptionHandler(ExpenseNotFoundException.class)
+    public ResponseEntity<ApiResponse<String>> handExpenseNotFound(ExpenseNotFoundException exception) {
+        System.out.println("Exception Occurred : " + exception.getMessage());
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(
+                new ApiResponse<>(exception.getMessage(), null, ResponseStatus.NOT_ALLOWED));
+    }
 }

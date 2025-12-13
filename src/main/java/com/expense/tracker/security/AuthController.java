@@ -21,6 +21,7 @@ import com.expense.tracker.dtos.UserRecord;
 import com.expense.tracker.enums.ResponseStatus;
 import com.expense.tracker.repositories.UserRepository;
 import com.expense.tracker.services.UserService;
+import com.expense.tracker.utilities.ApiResponseUtil;
 
 @RestController
 @RequestMapping("/auth")
@@ -42,7 +43,7 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<Map<String,String>> login(@RequestBody AuthRequest authRequest) {
+    public ResponseEntity<Map<String, String>> login(@RequestBody AuthRequest authRequest) {
         try {
 
             Authentication auth = authenticationManager.authenticate(
@@ -55,19 +56,16 @@ public class AuthController {
         } catch (BadCredentialsException | UsernameNotFoundException ex) {
             return ResponseEntity
                     .status(HttpStatus.UNAUTHORIZED)
-                    .body(Map.of("Error","Invalid Username or Password"));
+                    .body(Map.of("Error", "Invalid Username or Password"));
         }
     }
 
     @PostMapping("/register")
     public ResponseEntity<ApiResponse<UserRecord>> registerUser(@RequestBody UserRecord user) {
         user = userService.registerUser(user);
-        ApiResponse<UserRecord> apiResponse = new ApiResponse<>(
-                "User registered successfully",
-                "201",
-                user,
-                ResponseStatus.SUCCESS);
-        return ResponseEntity.status(HttpStatus.CREATED).body(apiResponse);
+
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(ApiResponseUtil.setApiResponse(ResponseStatus.SUCCESS, user));
     }
 
     // @PostMapping("/register")

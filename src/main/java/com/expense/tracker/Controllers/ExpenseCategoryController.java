@@ -33,7 +33,6 @@ public class ExpenseCategoryController {
          expenseCategoryRecord = expenseCategoryService.addExpenseCategory(expenseCategoryRecord);
         ApiResponse<ExpenseCategoryRecord> apiResponse = new ApiResponse<>(
                 "Expense Category Added.",
-                "201",
                 expenseCategoryRecord,
                 ResponseStatus.SUCCESS);
         return ResponseEntity.status(HttpStatus.CREATED).body(apiResponse);
@@ -50,7 +49,6 @@ public class ExpenseCategoryController {
         String responseMessage = expenseCategoryService.deleteExpenseCategories(expenseCategoryRecords);
          ApiResponse<String> apiResponse = new ApiResponse<>(
                 "Expense Category",
-                "204",
                 responseMessage,
                 ResponseStatus.SUCCESS);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).body(apiResponse);
@@ -63,7 +61,6 @@ public class ExpenseCategoryController {
         ExpenseCategoryRecord updatedCategory = expenseCategoryService.updateExpenseCategory(expenseCategoryORM);
         ApiResponse<ExpenseCategoryRecord> apiResponse = new ApiResponse<>(
                 "Expense Category Updated.",
-                "200",
                 updatedCategory,
                 ResponseStatus.SUCCESS);
         return ResponseEntity.status(HttpStatus.OK).body(apiResponse);

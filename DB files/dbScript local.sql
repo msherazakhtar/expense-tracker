@@ -348,22 +348,25 @@ update users set password = '$2a$10$nlK8P1aIgxvdFcDCR1VVS.dVDlrqi6HKq1AUSNtvOa1M
 
 
 select * from expenses
+go
 select * from categories
+go
 select * from mail_configuration
+go
 select * from users
 
 
 
 
 
+"expense_id"	"title"	"details"	"amount"	"category"	"user_id"	"is_group"	"is_deleted"	"date_created"	"created_by"	"date_modified"	"modified_by"
+
+"category_id"	"name"	"user_id"	"is_global"	"is_deleted"	"date_created"	"created_by"	"date_modified"	"modified_by"
 
 
+"configuration_id"	"sender"	"reciever"	"username"	"password"	"mail_server"	"is_active"
 
-
-
-
-
-
+"user_id"	"first_name"	"last_name"	"email"	"password"	"is_active"	"is_verified"	"verification_code"	"profile_pic_url"	"is_deleted"	"date_created"	"created_by"	"modified_by"	"date_modified"
 
 
 
