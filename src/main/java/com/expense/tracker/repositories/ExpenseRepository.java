@@ -1,8 +1,5 @@
 package com.expense.tracker.repositories;
 
-import java.sql.Date;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.data.domain.Page;

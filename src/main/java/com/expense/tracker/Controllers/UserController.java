@@ -1,8 +1,12 @@
 package com.expense.tracker.Controllers;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -15,14 +19,8 @@ import com.expense.tracker.enums.ResponseStatus;
 import com.expense.tracker.services.UserService;
 import com.expense.tracker.utilities.ApiResponseUtil;
 
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-
 @RestController
-@RequestMapping("/users")
+@RequestMapping("/user")
 public class UserController {
         UserService userService;
 
@@ -44,8 +42,8 @@ public class UserController {
 
         @GetMapping("/verify/{userId}/{verificationCode}")
         public ResponseEntity<ApiResponse<String>> verifyUserEmail(
-                        @PathVariable(name = "userId") String userId,
-                        @PathVariable(name = "verificationCode") String verificationCode
+                        @RequestParam(name = "userId") String userId,
+                        @RequestParam(name = "verificationCode") String verificationCode
 
         ) {
                 String respMessage = userService.verifyUser(userId, verificationCode);
@@ -56,7 +54,7 @@ public class UserController {
                 return ResponseEntity.status(HttpStatus.ACCEPTED).body(apiResponse);
         }
 
-        @GetMapping("/getUserProfile/{userId}")
+        @GetMapping("/{userId}")
         public ResponseEntity<UserProfileRecord> getUserProfile(
                         @PathVariable(name = "userId") String userId) {
                 UserProfileRecord userProfileRecord = userService.getUserProfile(userId);
@@ -64,7 +62,7 @@ public class UserController {
                 return ResponseEntity.status(HttpStatus.OK).body(userProfileRecord);
         }
 
-        @PutMapping("/updateUserProfile")
+        @PutMapping("/")
         public ResponseEntity<UserProfileRecord> updateUserProfile(
                         @RequestBody UserProfileRecord userProfileRecord) {
                 UserProfileRecord userProfileRecordUpdated = userService.updateUserProfile(userProfileRecord);
@@ -72,9 +70,9 @@ public class UserController {
                 return ResponseEntity.status(HttpStatus.OK).body(userProfileRecordUpdated);
         }
 
-        @PutMapping("/uploadProfilePicture/{userId}")
+        @PutMapping("/profile-picture/{userId}")
         public ResponseEntity<UserProfileRecord> uploadProfilePicture(
-                        @PathVariable(name = "userId") String userId,
+                        @RequestParam(name = "userId") String userId,
                         @RequestParam("profilePicture") MultipartFile profilePicture) {
                 UserProfileRecord userProfileRecordUpdated = userService.uploadProfilePicture(userId, profilePicture);
                 return ResponseEntity.status(HttpStatus.OK).body(userProfileRecordUpdated);

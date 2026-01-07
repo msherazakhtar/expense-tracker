@@ -20,27 +20,27 @@ public class ExpenseCategoryServiceImpl implements ExpenseCategoryService {
 
     @Override
     public ExpenseCategoryRecord addExpenseCategory(ExpenseCategoryRecord expenseCategoryRecord) {
-        ExpenseCategoryORM expenseCategoryORM = MappingUtility.mapExpenseRecordToCategoryORM(expenseCategoryRecord);
+        ExpenseCategoryORM expenseCategoryORM = MappingUtility.expenseRecordToCategoryORM(expenseCategoryRecord);
         expenseCategoryORM = expenseCategoryRepository.save(expenseCategoryORM);
-        return MappingUtility.mapExpenseCategoryORMToRecord(expenseCategoryORM);
+        return MappingUtility.expenseCategoryORMToRecord(expenseCategoryORM);
     }
 
     @Override
     public List<ExpenseCategoryRecord> getExpenseCategories(String userId) {
-        List<ExpenseCategoryORM> expenseCategoryORMs = expenseCategoryRepository.findAllByUserId(Long.parseLong(userId));
+        List<ExpenseCategoryORM> expenseCategoryORMs = expenseCategoryRepository
+                .findAllByUserId(Long.parseLong(userId));
         List<ExpenseCategoryRecord> expenseCategoryRecords = new ArrayList<>();
         for (ExpenseCategoryORM category : expenseCategoryORMs) {
-            expenseCategoryRecords.add(MappingUtility.mapExpenseCategoryORMToRecord(category));
+            expenseCategoryRecords.add(MappingUtility.expenseCategoryORMToRecord(category));
         }
         return expenseCategoryRecords;
     }
 
     @Override
     public String deleteExpenseCategories(List<ExpenseCategoryRecord> expenseCategoryRecords) {
-        List<ExpenseCategoryORM> expenseCategoryORMs =  new ArrayList<>();
-        for(ExpenseCategoryRecord record : expenseCategoryRecords)
-        {
-            expenseCategoryORMs.add(MappingUtility.mapExpenseRecordToCategoryORM(record));
+        List<ExpenseCategoryORM> expenseCategoryORMs = new ArrayList<>();
+        for (ExpenseCategoryRecord record : expenseCategoryRecords) {
+            expenseCategoryORMs.add(MappingUtility.expenseRecordToCategoryORM(record));
         }
         expenseCategoryRepository.deleteAll(expenseCategoryORMs);
         return "Categories Deleted";
@@ -50,8 +50,7 @@ public class ExpenseCategoryServiceImpl implements ExpenseCategoryService {
     @Override
     public ExpenseCategoryRecord updateExpenseCategory(ExpenseCategoryORM expenseCategoryORM) {
         ExpenseCategoryORM updatedCategory = expenseCategoryRepository.save(expenseCategoryORM);
-        return MappingUtility.mapExpenseCategoryORMToRecord(updatedCategory);
+        return MappingUtility.expenseCategoryORMToRecord(updatedCategory);
     }
-
 
 }

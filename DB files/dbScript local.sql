@@ -184,8 +184,29 @@ CREATE TABLE categories (
 
 
 
+CREATE TABLE groups (
+    group_id bigint  generated always as identity,
+    name VARCHAR(255) ,
+	user_id bigint ,
+	is_deleted boolean default false,
+    date_created TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+	created_by varchar(100),
+	date_modified timestamp default current_timestamp,
+	modified_by varchar(100)
+);
 
 
+CREATE TABLE group_memebrs (
+    group_memeber_id bigint  generated always as identity,
+    name VARCHAR(255) ,
+	email VARCHAR(255) ,
+	phone VARCHAR(50) ,
+	is_deleted boolean default false,
+    date_created TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+	created_by varchar(100),
+	date_modified timestamp default current_timestamp,
+	modified_by varchar(100)
+);
 
 
 

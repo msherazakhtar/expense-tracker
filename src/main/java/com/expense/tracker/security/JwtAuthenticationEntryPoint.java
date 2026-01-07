@@ -18,14 +18,14 @@ public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
             HttpServletResponse response,
             AuthenticationException authException) throws IOException {
 
-        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-        response.setContentType("application/json");
+        // response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+        // response.setContentType("application/json");
 
-        response.getWriter().write("""
-            {
-                "status": "ERROR",
-                "message": "Invalid,Missing or Expired Token"
-            }
-        """);
+        // response.getWriter().write("""
+        //     {
+        //         "status": "ERROR",
+        //         "message": "Invalid,Missing or Expired Token"
+        //     }
+        // """);
     }
 }

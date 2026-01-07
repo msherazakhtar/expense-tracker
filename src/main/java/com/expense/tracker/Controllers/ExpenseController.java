@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -23,58 +22,46 @@ import com.expense.tracker.services.ExpenseService;
 @RestController
 @RequestMapping("/expense")
 public class ExpenseController {
-    @Autowired
-    ExpenseService expenseService;
+        @Autowired
+        ExpenseService expenseService;
 
-    @PostMapping("/addExpense")
-    public ResponseEntity<ApiResponse<ExpenseRecord>> addExpense(
-            @RequestBody ExpenseRecord expenseRecord) {
-        expenseRecord = expenseService.addExpense(expenseRecord);
-        ApiResponse<ExpenseRecord> apiResponse = new ApiResponse<>(
-                "Expense",	
-                expenseRecord,
-                ResponseStatus.SUCCESS);
-        return ResponseEntity.status(HttpStatus.CREATED).body(apiResponse);
+        @PostMapping
+        public ResponseEntity<ApiResponse<ExpenseRecord>> addExpense(
+                        @RequestBody ExpenseRecord expenseRecord) {
+                expenseRecord = expenseService.addExpense(expenseRecord);
+                ApiResponse<ExpenseRecord> apiResponse = new ApiResponse<>(
+                                "Expense",
+                                expenseRecord,
+                                ResponseStatus.SUCCESS);
+                return ResponseEntity.status(HttpStatus.CREATED).body(apiResponse);
 
-    }
+        }
 
-//      @PostMapping("/updateExpense")
-//     public ResponseEntity<ApiResponse<ExpenseRecord>> addExpense(
-//             @RequestBody ExpenseRecord expenseRecord) {
-//         expenseRecord = expenseService.addExpense(expenseRecord);
-//         ApiResponse<ExpenseRecord> apiResponse = new ApiResponse<>(
-//                 "Expense",	
-//                 "201",
-//                 expenseRecord,
-//                 ResponseStatus.SUCCESS);
-//         return ResponseEntity.status(HttpStatus.CREATED).body(apiResponse);
+        @PostMapping("/search")
+        public ResponseEntity<List<ExpenseRecord>> getExpgetgeteenseByUserId(
+                        @RequestBody SearchCriteria requestCriteria) {
+                List<ExpenseRecord> expenseRecord = expenseService.getExpenseByUserId(requestCriteria);
+                return ResponseEntity.status(HttpStatus.OK).body(expenseRecord);
 
-//     }
+        }
 
-      @GetMapping("/getExpenseByUserId")
-     public ResponseEntity<List<ExpenseRecord>> getExpenseByUserId(
-            @RequestBody SearchCriteria requestCriteria) {
-         List<ExpenseRecord> expenseRecord = expenseService.getExpenseByUserId(requestCriteria);
-         return ResponseEntity.status(HttpStatus.OK).body(expenseRecord);
+        @PostMapping("/summary")
+        public ResponseEntity<List<ExpenseSummaryORM>> getExpenseSummary(
+                        @RequestBody SearchCriteria requestCriteria) {
+                List<ExpenseSummaryORM> expenseSummary = expenseService.getExpenseSummary(requestCriteria);
+                return ResponseEntity.status(HttpStatus.OK).body(expenseSummary);
 
-    }
-      @GetMapping("/getExpenseSummary")
-     public ResponseEntity<List<ExpenseSummaryORM>> getExpenseSummary(
-            @RequestBody SearchCriteria requestCriteria) {
-         List<ExpenseSummaryORM> expenseSummary = expenseService.getExpenseSummary(requestCriteria);
-         return ResponseEntity.status(HttpStatus.OK).body(expenseSummary);
+        }
 
-    }
-      @DeleteMapping("/deleteSingleExpense/{expenseId}")
-      public ResponseEntity<ApiResponse<String>> deleteSingleExpense(
-              @PathVariable("expenseId") Long expenseId) {
-          String responseMessage = expenseService.deleteSingleExpense(expenseId);
-          ApiResponse<String> apiResponse = new ApiResponse<>(
-                  "Expense",	
-                  responseMessage,
-                  ResponseStatus.SUCCESS);
-          return ResponseEntity.status(HttpStatus.CREATED).body(apiResponse);
-     }
-
+        @DeleteMapping("/{expenseId}")
+        public ResponseEntity<ApiResponse<String>> deleteSingleExpense(
+                        @PathVariable("expenseId") Long expenseId) {
+                String responseMessage = expenseService.deleteSingleExpense(expenseId);
+                ApiResponse<String> apiResponse = new ApiResponse<>(
+                                "Expense",
+                                responseMessage,
+                                ResponseStatus.SUCCESS);
+                return ResponseEntity.status(HttpStatus.CREATED).body(apiResponse);
+        }
 
 }

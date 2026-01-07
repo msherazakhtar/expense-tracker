@@ -19,7 +19,6 @@ import com.expense.tracker.dtos.ApiResponse;
 import com.expense.tracker.dtos.AuthRequest;
 import com.expense.tracker.dtos.UserRecord;
 import com.expense.tracker.enums.ResponseStatus;
-import com.expense.tracker.repositories.UserRepository;
 import com.expense.tracker.services.UserService;
 import com.expense.tracker.utilities.ApiResponseUtil;
 
@@ -31,14 +30,12 @@ public class AuthController {
 
     private JwtUtil jwtUtil;
 
-    private UserRepository userRepo;
     private UserService userService;
 
-    public AuthController(AuthenticationManager authenticationManager, JwtUtil jwtUtil, UserRepository userRepository,
+    public AuthController(AuthenticationManager authenticationManager, JwtUtil jwtUtil,
             UserService userService) {
         this.authenticationManager = authenticationManager;
         this.jwtUtil = jwtUtil;
-        this.userRepo = userRepository;
         this.userService = userService;
     }
 

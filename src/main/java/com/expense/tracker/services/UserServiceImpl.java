@@ -32,21 +32,24 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserRecord registerUser(UserRecord user) {
-    
+
         if (userRepository.existsByEmail(user.email())) {
             throw new UserAlreadyExistException("User with email : " + user.email() + " already exists.");
         }
-        UsersORM userORM = MappingUtility.mapUserRecordToORM(user);
-        // Optional<MailConfigurationORM> mailConfiguration = Optional.ofNullable(mailConfigurationRepository
-        //         .findBymailServer("Gmail")
-        //         .orElseThrow(
-        //                 () -> new MailConfigurationNotFoundException("Mail Configuration for your server not found")));
+        UsersORM userORM = MappingUtility.userRecordToORM(user);
+        // Optional<MailConfigurationORM> mailConfiguration =
+        // Optional.ofNullable(mailConfigurationRepository
+        // .findBymailServer("Gmail")
+        // .orElseThrow(
+        // () -> new MailConfigurationNotFoundException("Mail Configuration for your
+        // server not found")));
         // userORM.setVerificationCode(GeneralUtilities.generateVerificationCode());
         userORM.setPassword(new BCryptPasswordEncoder().encode(userORM.getPassword()));
         userORM = userRepository.save(userORM);
-        // EmailUtility.sendUserVerificationEmail(mailConfiguration.get(), userORM.getEmail(),
-        //         userORM.getVerificationCode());
-        return MappingUtility.mapUserORMToUserRecord(userORM);
+        // EmailUtility.sendUserVerificationEmail(mailConfiguration.get(),
+        // userORM.getEmail(),
+        // userORM.getVerificationCode());
+        return MappingUtility.userORMToUserRecord(userORM);
 
     }
 
@@ -66,31 +69,31 @@ public class UserServiceImpl implements UserService {
     public UserProfileRecord getUserProfile(String userId) {
         UsersORM usersORM = userRepository.findById(Long.parseLong(userId)).orElseThrow(
                 () -> new UserNotFoundException("User Not Found"));
-        return MappingUtility.mapUserORMToUserProfile(usersORM);
+        return MappingUtility.userORMToUserProfile(usersORM);
     }
 
     @Override
     public UserProfileRecord updateUserProfile(UserProfileRecord userProfileRecord) {
-        UsersORM usersORM = MappingUtility.mapUserProfileRecordToORM(userProfileRecord);
-        if (usersORM.getPassword()!=null && 
-        !usersORM.getPassword().equals("")) {
+        UsersORM usersORM = MappingUtility.userProfileRecordToORM(userProfileRecord);
+        if (usersORM.getPassword() != null &&
+                !usersORM.getPassword().equals("")) {
             usersORM.setPassword(new BCryptPasswordEncoder().encode(usersORM.getPassword()));
         }
         usersORM = userRepository.save(usersORM);
-        return MappingUtility.mapUserORMToUserProfile(usersORM);
+        return MappingUtility.userORMToUserProfile(usersORM);
 
     }
 
     @Override
     public UserProfileRecord uploadProfilePicture(String userId, MultipartFile profilePicture) {
-        //finding the user by ID
+        // finding the user by ID
         UsersORM usersORM = userRepository.findById(Long.parseLong(userId)).orElseThrow(
                 () -> new UserNotFoundException("User Not Found"));
-        //uploading the profile picture and getting the URL
+        // uploading the profile picture and getting the URL
         String profilePictureUrl = FileUtils.uploadFile(profilePicture);
         usersORM.setProfilePictureUrl(profilePictureUrl);
         usersORM = userRepository.save(usersORM);
-        return MappingUtility.mapUserORMToUserProfile(usersORM);
+        return MappingUtility.userORMToUserProfile(usersORM);
     }
 
 }

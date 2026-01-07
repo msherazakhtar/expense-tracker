@@ -28,9 +28,9 @@ public class ExpenseServiceImpl implements ExpenseService {
 
 	@Override
 	public ExpenseRecord addExpense(ExpenseRecord expenseRecord) {
-		ExpenseORM expenseORM = MappingUtility.mapExpenseRecordToORM(expenseRecord);
+		ExpenseORM expenseORM = MappingUtility.expenseRecordToORM(expenseRecord);
 		expenseORM = expenseRepository.save(expenseORM);
-		return MappingUtility.mapExpenseORMToRecord(expenseORM);
+		return MappingUtility.expenseORMToRecord(expenseORM);
 	}
 
 	@Override
@@ -38,42 +38,36 @@ public class ExpenseServiceImpl implements ExpenseService {
 		Sort sort = requestCriteria.getSortingOrder().equalsIgnoreCase("desc")
 				? Sort.by(requestCriteria.getSortBy()).descending()
 				: Sort.by(requestCriteria.getSortBy()).ascending();
-		
-				
+
 		Page<ExpenseORM> pageExpenses = expenseRepository.findByUserId(requestCriteria.getId(),
 				PageRequest.of(requestCriteria.getPageNumber(), requestCriteria.getPageSize(), sort));
 		List<ExpenseORM> lstExpenseORM = pageExpenses.getContent();
 		List<ExpenseRecord> lstExpenseRecord = new ArrayList<ExpenseRecord>();
 		for (ExpenseORM expense : lstExpenseORM) {
-			lstExpenseRecord.add(MappingUtility.mapExpenseORMToRecord(expense));
+			lstExpenseRecord.add(MappingUtility.expenseORMToRecord(expense));
 		}
 		return lstExpenseRecord;
 	}
 
 	@Override
 	public List<ExpenseSummaryORM> getExpenseSummary(SearchCriteria requestCriteria) {
-	
-				String dateFrom = null;
-				String dateTo = null;
-				String category = "";
-				for(SearchCriteriaParmeters parameter: requestCriteria.getParameters())
-				{
-					if(parameter.getParamName().equals("dateFrom"))
-					{
-						dateFrom = parameter.getParamValue();
-					}
-					else if(parameter.getParamName().equals("dateTo"))
-					{
-						dateTo = parameter.getParamValue();
-					}
-					else if(parameter.getParamName().equals("category"))
-					{
-						category = parameter.getParamValue();
-					}
-				}
-				
+
+		String dateFrom = null;
+		String dateTo = null;
+		String category = "";
+		for (SearchCriteriaParmeters parameter : requestCriteria.getParameters()) {
+			if (parameter.getParamName().equals("dateFrom")) {
+				dateFrom = parameter.getParamValue();
+			} else if (parameter.getParamName().equals("dateTo")) {
+				dateTo = parameter.getParamValue();
+			} else if (parameter.getParamName().equals("category")) {
+				category = parameter.getParamValue();
+			}
+		}
+
 		return expenseRepository.getUserExpenseSummary(requestCriteria.getId(), category, dateFrom, dateTo);
 	}
+
 	@Override
 	public String deleteSingleExpense(Long expenseId) {
 		ExpenseORM expenseToDelete = expenseRepository.findById(expenseId).orElseThrow(
