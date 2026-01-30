@@ -5,15 +5,18 @@ import java.util.List;
 import com.expense.tracker.dtos.ExpenseRecord;
 import com.expense.tracker.dtos.SearchCriteria;
 import com.expense.tracker.models.ExpenseSummaryORM;
+import com.expense.tracker.wrappers.ExpenseWrapper;
 
 public interface ExpenseService {
 
-	ExpenseRecord addExpense(ExpenseRecord expenseRecord);
+	ExpenseWrapper addExpense(ExpenseWrapper saveExpenseWrapper);
 
 	List<ExpenseRecord> getExpenseByUserId(SearchCriteria requestCriteria);
 
 	String deleteSingleExpense(Long expenseId);
 
 	List<ExpenseSummaryORM> getExpenseSummary(SearchCriteria requestCriteria);
+
+	ExpenseWrapper getExpenseById(Long expenseId);
 
 }

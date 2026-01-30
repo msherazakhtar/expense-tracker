@@ -14,7 +14,7 @@ import jakarta.persistence.Table;
 public class GroupMembersORM extends GlobalFields {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "group_memebr_id")
+    @Column(name = "group_member_id")
     private Long groupMemberId;
     @Column(name = "name")
     private String name;
@@ -22,12 +22,14 @@ public class GroupMembersORM extends GlobalFields {
     private String email;
     @Column(name = "phone")
     private String phone;
+    @Column(name = "group_id")
+    private Long groupId;
 
     public GroupMembersORM() {
         super();
     }
 
-    public GroupMembersORM(Long groupMemberId, String name, String email, String phone, Boolean isDeleted,
+    public GroupMembersORM(Long groupMemberId, String name, String email, String phone, Long groupId, Boolean isDeleted,
             LocalDateTime createdAt,
             String createdBy, LocalDateTime modifiedAt,
             String modifiedBy) {
@@ -43,14 +45,6 @@ public class GroupMembersORM extends GlobalFields {
         this.name = name;
         this.phone = phone;
         this.email = email;
-    }
-
-    public Long getGroupMemberId() {
-        return groupMemberId;
-    }
-
-    public void setGroupMemberId(Long groupMemberId) {
-        this.groupMemberId = groupMemberId;
     }
 
     public String getName() {
@@ -75,6 +69,22 @@ public class GroupMembersORM extends GlobalFields {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public Long getGroupMemberId() {
+        return groupMemberId;
+    }
+
+    public void setGroupMemberId(Long groupMemberId) {
+        this.groupMemberId = groupMemberId;
+    }
+
+    public Long getGroupId() {
+        return groupId;
+    }
+
+    public void setGroupId(Long groupId) {
+        this.groupId = groupId;
     }
 
 }

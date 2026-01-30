@@ -19,7 +19,7 @@ import com.expense.tracker.services.GroupsService;
 import com.expense.tracker.utilities.ApiResponseUtil;
 
 @RestController
-@RequestMapping("/group")
+@RequestMapping("/groups")
 public class GroupsController {
     GroupsService groupsService;
 

@@ -1,6 +1,7 @@
 package com.expense.tracker.services;
 
-import java.sql.Date;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -9,28 +10,52 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import com.expense.tracker.dtos.ExpenseDetailsRecord;
 import com.expense.tracker.dtos.ExpenseRecord;
 import com.expense.tracker.dtos.SearchCriteria;
 import com.expense.tracker.dtos.SearchCriteriaParmeters;
 import com.expense.tracker.exceptions.ExpenseNotFoundException;
+import com.expense.tracker.models.ExpenseDetailsORM;
 import com.expense.tracker.models.ExpenseORM;
 import com.expense.tracker.models.ExpenseSummaryORM;
+import com.expense.tracker.repositories.ExpenseDetailsRepository;
 import com.expense.tracker.repositories.ExpenseRepository;
 import com.expense.tracker.utilities.MappingUtility;
+import com.expense.tracker.wrappers.ExpenseWrapper;
+
+import jakarta.transaction.Transactional;
 
 @Service
 public class ExpenseServiceImpl implements ExpenseService {
 	ExpenseRepository expenseRepository;
+	ExpenseDetailsRepository expenseDetailsRepository;
 
-	public ExpenseServiceImpl(ExpenseRepository expenseRepository) {
+	public ExpenseServiceImpl(ExpenseRepository expenseRepository, ExpenseDetailsRepository expenseDetailsRepository) {
 		this.expenseRepository = expenseRepository;
+		this.expenseDetailsRepository = expenseDetailsRepository;
 	}
 
 	@Override
-	public ExpenseRecord addExpense(ExpenseRecord expenseRecord) {
-		ExpenseORM expenseORM = MappingUtility.expenseRecordToORM(expenseRecord);
+	@Transactional
+	public ExpenseWrapper addExpense(ExpenseWrapper saveExpenseWrapper) {
+		ExpenseORM expenseORM = MappingUtility.expenseRecordToORM(saveExpenseWrapper.getExpenseRecord());
+		BigDecimal amountPerPerson = saveExpenseWrapper.getExpenseRecord().amount()
+				.divide(BigDecimal.valueOf(saveExpenseWrapper.getExpenseDetails().size()), 2, RoundingMode.HALF_UP);
+		expenseORM.setAmountPerHead(amountPerPerson);
 		expenseORM = expenseRepository.save(expenseORM);
-		return MappingUtility.expenseORMToRecord(expenseORM);
+
+		List<ExpenseDetailsRecord> savedExpenseDetails = new ArrayList<>();
+		for (ExpenseDetailsRecord expenseDetail : saveExpenseWrapper.getExpenseDetails()) {
+			ExpenseDetailsORM expenseDetailsORM = MappingUtility.expenseDetailsRecordToORM(expenseDetail);
+			expenseDetailsORM.setPendingAmount(expenseDetailsORM.getPaidAmount().subtract(amountPerPerson));
+			expenseDetailsORM.setExpenseId(expenseORM.getId());
+			expenseDetailsRepository.save(expenseDetailsORM);
+			savedExpenseDetails.add(MappingUtility.expenseDetailsORMToRecord(expenseDetailsORM));
+		}
+
+		saveExpenseWrapper.setExpenseRecord(MappingUtility.expenseORMToRecord(expenseORM));
+		saveExpenseWrapper.setExpenseDetails(savedExpenseDetails);
+		return saveExpenseWrapper;
 	}
 
 	@Override
@@ -76,6 +101,17 @@ public class ExpenseServiceImpl implements ExpenseService {
 		expenseRepository.delete(expenseToDelete);
 		return "Expense Deleted Successfuly";
 
+	}
+
+	@Override
+	public ExpenseWrapper getExpenseById(Long expenseId) {
+		ExpenseORM expenseORM = expenseRepository.findById(expenseId).orElseThrow(
+				() -> new ExpenseNotFoundException("Expense not found..."));
+		List<ExpenseDetailsORM> expenseDetailsORM = expenseDetailsRepository.findByExpenseId(expenseId);
+		ExpenseWrapper expenseWrapper = new ExpenseWrapper();
+		expenseWrapper.setExpenseRecord(MappingUtility.expenseORMToRecord(expenseORM));
+		expenseWrapper.setExpenseDetails(MappingUtility.expenseDetailsORMListToRecordList(expenseDetailsORM));
+		return expenseWrapper;
 	}
 
 }

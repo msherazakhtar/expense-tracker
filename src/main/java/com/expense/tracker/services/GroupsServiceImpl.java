@@ -1,13 +1,11 @@
 package com.expense.tracker.services;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
 
 import com.expense.tracker.dtos.GroupRecord;
 import com.expense.tracker.exceptions.ExpenseNotFoundException;
-import com.expense.tracker.models.ExpenseORM;
 import com.expense.tracker.models.GroupsORM;
 import com.expense.tracker.repositories.GroupsRepository;
 import com.expense.tracker.utilities.MappingUtility;

@@ -62,7 +62,7 @@ public class UserController {
                 return ResponseEntity.status(HttpStatus.OK).body(userProfileRecord);
         }
 
-        @PutMapping("/")
+        @PutMapping
         public ResponseEntity<UserProfileRecord> updateUserProfile(
                         @RequestBody UserProfileRecord userProfileRecord) {
                 UserProfileRecord userProfileRecordUpdated = userService.updateUserProfile(userProfileRecord);

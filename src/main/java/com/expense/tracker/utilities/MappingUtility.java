@@ -1,12 +1,18 @@
 package com.expense.tracker.utilities;
 
 import com.expense.tracker.dtos.GroupRecord;
+
+import java.util.List;
+import java.util.stream.Collectors;
+
 import com.expense.tracker.dtos.ExpenseCategoryRecord;
+import com.expense.tracker.dtos.ExpenseDetailsRecord;
 import com.expense.tracker.dtos.ExpenseRecord;
 import com.expense.tracker.dtos.GroupMembersRecord;
 import com.expense.tracker.dtos.UserProfileRecord;
 import com.expense.tracker.dtos.UserRecord;
 import com.expense.tracker.models.ExpenseCategoryORM;
+import com.expense.tracker.models.ExpenseDetailsORM;
 import com.expense.tracker.models.ExpenseORM;
 import com.expense.tracker.models.GroupMembersORM;
 import com.expense.tracker.models.GroupsORM;
@@ -79,6 +85,8 @@ public class MappingUtility {
         orm.setIsGroup(record.isGroup());
         orm.setCreatedAt(record.createdAt());
         orm.setUserId(record.userId());
+        orm.setGroupId(record.groupId());
+        orm.setAmountPerHead(record.amountPerHead());
         return orm;
     }
 
@@ -90,8 +98,10 @@ public class MappingUtility {
                 orm.getAmount(),
                 orm.getCategory(),
                 orm.getUserId(),
+                orm.getGroupId(),
                 orm.getCreatedBy(),
                 orm.getIsGroup(),
+                orm.getAmountPerHead(),
                 orm.getCreatedAt());
     }
 
@@ -108,13 +118,30 @@ public class MappingUtility {
 
     // Group Memebrs
     public static GroupMembersORM groupMemebrRecordToORM(GroupMembersRecord record) {
-        return new GroupMembersORM(record.groupMemebrId(), record.name(), record.email(), record.phone(), false,
+        return new GroupMembersORM(record.groupMemebrId(), record.name(), record.email(), record.phone(),
+                record.groupId(), false,
                 record.createdAt(),
                 record.createdBy(), record.modifiedAt(), record.modifiedBy());
     }
 
     public static GroupMembersRecord groupMemberORMToRecord(GroupMembersORM orm) {
         return new GroupMembersRecord(orm.getGroupMemberId(), orm.getName(), orm.getEmail(), orm.getPhone(),
+                orm.getGroupId(),
                 orm.getCreatedAt(), orm.getCreatedBy(), orm.getModifiedAt(), orm.getModifiedBy());
+    }
+
+    // Expense Details
+    public static ExpenseDetailsORM expenseDetailsRecordToORM(ExpenseDetailsRecord record) {
+        return new ExpenseDetailsORM(record.expenseDetailsId(), record.expenseId(), record.groupMemberId(),
+                record.paidAmount(), record.pendingAmount());
+    }
+
+    public static ExpenseDetailsRecord expenseDetailsORMToRecord(ExpenseDetailsORM orm) {
+        return new ExpenseDetailsRecord(orm.getExpenseDetailsId(), orm.getExpenseId(), orm.getGroupMemberId(),
+                orm.getPaidAmount(), orm.getPendingAmount(), orm.getCreatedBy(), orm.getCreatedAt());
+    }
+
+    public static List<ExpenseDetailsRecord> expenseDetailsORMListToRecordList(List<ExpenseDetailsORM> orm) {
+        return orm.stream().map(MappingUtility::expenseDetailsORMToRecord).collect(Collectors.toList());
     }
 }

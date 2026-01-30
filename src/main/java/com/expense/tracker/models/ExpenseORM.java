@@ -20,6 +20,8 @@ public class ExpenseORM {
     private Long userId;
     @Column(name = "is_group")
     private Boolean isGroup = false;
+    @Column(name = "amount_per_head")
+    private BigDecimal amountPerHead;
     @Column(name = "date_created")
     private LocalDateTime createdAt = LocalDateTime.now();
     @Column(name = "created_by")
@@ -28,6 +30,8 @@ public class ExpenseORM {
     private LocalDateTime modifiedAt = LocalDateTime.now();
     @Column(name = "modified_by")
     private String modifiedBy;
+    @Column(name = "group_id")
+    private Long groupId;
 
     // Getters and Setters
     public Long getId() {
@@ -116,6 +120,22 @@ public class ExpenseORM {
 
     public void setModifiedBy(String modifiedBy) {
         this.modifiedBy = modifiedBy;
+    }
+
+    public Long getGroupId() {
+        return groupId;
+    }
+
+    public void setGroupId(Long groupId) {
+        this.groupId = groupId;
+    }
+
+    public BigDecimal getAmountPerHead() {
+        return amountPerHead;
+    }
+
+    public void setAmountPerHead(BigDecimal amountPerHead) {
+        this.amountPerHead = amountPerHead;
     }
 
 }

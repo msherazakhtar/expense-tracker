@@ -392,8 +392,4 @@ select * from users
 
 
 
-
-
-
-
-
+elect * from expense_details
