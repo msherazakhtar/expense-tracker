@@ -26,25 +26,37 @@ public class ExpenseDetailsORM extends GlobalFields {
     private BigDecimal paidAmount;
     @Column(name = "pending_amount")
     private BigDecimal pendingAmount;
+    @Column(name = "amount_to_pay")
+    private BigDecimal amountToPay;
+    @Column(name = "amount_to_get")
+    private BigDecimal amountToGet;
+    @Column(name = "is_settled")
+    private Boolean isSettled;
 
     public ExpenseDetailsORM(Boolean isDeleted, LocalDateTime createdAt, String createdBy, LocalDateTime modifiedAt,
             String modifiedBy, Long expenseDetailsId, Long expenseId, Long groupMemberId, BigDecimal paidAmount,
-            BigDecimal pendingAmount) {
+            BigDecimal pendingAmount, BigDecimal amountToPay, Boolean isSettled, BigDecimal amountToGet) {
         super(isDeleted, createdAt, createdBy, modifiedAt, modifiedBy);
         this.expenseDetailsId = expenseDetailsId;
         this.expenseId = expenseId;
         this.groupMemberId = groupMemberId;
         this.paidAmount = paidAmount;
         this.pendingAmount = pendingAmount;
+        this.amountToPay = amountToPay;
+        this.isSettled = isSettled;
+        this.amountToGet = amountToGet;
     }
 
     public ExpenseDetailsORM(Long expenseDetailsId, Long expenseId, Long groupMemberId, BigDecimal paidAmount,
-            BigDecimal pendingAmount) {
+            BigDecimal pendingAmount, BigDecimal amountToPay, Boolean isSettled, BigDecimal amountToGet) {
         this.expenseDetailsId = expenseDetailsId;
         this.expenseId = expenseId;
         this.groupMemberId = groupMemberId;
         this.paidAmount = paidAmount;
         this.pendingAmount = pendingAmount;
+        this.amountToPay = amountToPay;
+        this.isSettled = isSettled;
+        this.amountToGet = amountToGet;
     }
 
     public ExpenseDetailsORM() {
@@ -89,6 +101,30 @@ public class ExpenseDetailsORM extends GlobalFields {
 
     public void setPendingAmount(BigDecimal pendingAmount) {
         this.pendingAmount = pendingAmount;
+    }
+
+    public BigDecimal getAmountToPay() {
+        return amountToPay;
+    }
+
+    public void setAmountToPay(BigDecimal amountToPay) {
+        this.amountToPay = amountToPay;
+    }
+
+    public Boolean getIsSettled() {
+        return isSettled;
+    }
+
+    public void setIsSettled(Boolean isSettled) {
+        this.isSettled = isSettled;
+    }
+
+    public BigDecimal getAmountToGet() {
+        return amountToGet;
+    }
+
+    public void setAmountToGet(BigDecimal amountToGet) {
+        this.amountToGet = amountToGet;
     }
 
 }

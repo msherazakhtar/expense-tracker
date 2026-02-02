@@ -4,12 +4,15 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 public record ExpenseDetailsRecord(
-        Long expenseDetailsId,
-        Long expenseId,
-        Long groupMemberId,
-        BigDecimal paidAmount,
-        BigDecimal pendingAmount,
-        String createdBy,
-        LocalDateTime createdAt) {
+                Long expenseDetailsId,
+                Long expenseId,
+                Long groupMemberId,
+                BigDecimal paidAmount,
+                BigDecimal pendingAmount,
+                BigDecimal amountToPay,
+                Boolean isSettled,
+                BigDecimal amountToGet,
+                String createdBy,
+                LocalDateTime createdAt) {
 
 }

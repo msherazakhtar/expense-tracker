@@ -48,6 +48,18 @@ public class ExpenseServiceImpl implements ExpenseService {
 		for (ExpenseDetailsRecord expenseDetail : saveExpenseWrapper.getExpenseDetails()) {
 			ExpenseDetailsORM expenseDetailsORM = MappingUtility.expenseDetailsRecordToORM(expenseDetail);
 			expenseDetailsORM.setPendingAmount(expenseDetailsORM.getPaidAmount().subtract(amountPerPerson));
+			BigDecimal pendingAmount = expenseDetailsORM.getPendingAmount();
+			if (pendingAmount.compareTo(BigDecimal.ZERO) == 0) {
+				expenseDetailsORM.setAmountToGet(BigDecimal.ZERO);
+				expenseDetailsORM.setAmountToPay(BigDecimal.ZERO);
+				expenseDetailsORM.setIsSettled(true);
+			} else if (pendingAmount.compareTo(BigDecimal.ZERO) > 0) {
+				expenseDetailsORM.setAmountToGet(pendingAmount);
+				expenseDetailsORM.setIsSettled(false);
+			} else if (pendingAmount.compareTo(BigDecimal.ZERO) < 0) {
+				expenseDetailsORM.setAmountToPay(pendingAmount);
+				expenseDetailsORM.setIsSettled(false);
+			}
 			expenseDetailsORM.setExpenseId(expenseORM.getId());
 			expenseDetailsRepository.save(expenseDetailsORM);
 			savedExpenseDetails.add(MappingUtility.expenseDetailsORMToRecord(expenseDetailsORM));

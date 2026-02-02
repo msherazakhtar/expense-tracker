@@ -1,19 +1,20 @@
 package com.expense.tracker.utilities;
 
-import com.expense.tracker.dtos.GroupRecord;
-
 import java.util.List;
 import java.util.stream.Collectors;
 
 import com.expense.tracker.dtos.ExpenseCategoryRecord;
 import com.expense.tracker.dtos.ExpenseDetailsRecord;
 import com.expense.tracker.dtos.ExpenseRecord;
+import com.expense.tracker.dtos.ExpenseSettlementRecord;
 import com.expense.tracker.dtos.GroupMembersRecord;
+import com.expense.tracker.dtos.GroupRecord;
 import com.expense.tracker.dtos.UserProfileRecord;
 import com.expense.tracker.dtos.UserRecord;
 import com.expense.tracker.models.ExpenseCategoryORM;
 import com.expense.tracker.models.ExpenseDetailsORM;
 import com.expense.tracker.models.ExpenseORM;
+import com.expense.tracker.models.ExpenseSettlementORM;
 import com.expense.tracker.models.GroupMembersORM;
 import com.expense.tracker.models.GroupsORM;
 import com.expense.tracker.models.UsersORM;
@@ -133,15 +134,34 @@ public class MappingUtility {
     // Expense Details
     public static ExpenseDetailsORM expenseDetailsRecordToORM(ExpenseDetailsRecord record) {
         return new ExpenseDetailsORM(record.expenseDetailsId(), record.expenseId(), record.groupMemberId(),
-                record.paidAmount(), record.pendingAmount());
+                record.paidAmount(), record.pendingAmount(), record.amountToPay(), record.isSettled(),
+                record.amountToGet());
     }
 
     public static ExpenseDetailsRecord expenseDetailsORMToRecord(ExpenseDetailsORM orm) {
         return new ExpenseDetailsRecord(orm.getExpenseDetailsId(), orm.getExpenseId(), orm.getGroupMemberId(),
-                orm.getPaidAmount(), orm.getPendingAmount(), orm.getCreatedBy(), orm.getCreatedAt());
+                orm.getPaidAmount(), orm.getPendingAmount(), orm.getAmountToPay(), orm.getIsSettled(),
+                orm.getAmountToGet(), orm.getCreatedBy(), orm.getCreatedAt());
     }
 
     public static List<ExpenseDetailsRecord> expenseDetailsORMListToRecordList(List<ExpenseDetailsORM> orm) {
         return orm.stream().map(MappingUtility::expenseDetailsORMToRecord).collect(Collectors.toList());
+    }
+
+    // Expense Settlement
+    public static ExpenseSettlementORM expenseSettlementRecordToORM(ExpenseSettlementRecord record) {
+        return new ExpenseSettlementORM(record.expenseSettlementId(), record.expenseId(), record.expenseDetailsId(),
+                record.settlementAmount(), record.settlementType(), record.paidBy(), record.paidTo(),
+                record.settlementDate());
+    }
+
+    public static ExpenseSettlementRecord expenseSettlementORMToRecord(ExpenseSettlementORM orm) {
+        return new ExpenseSettlementRecord(orm.getExpenseSettlementId(), orm.getExpenseId(), orm.getExpenseDetailsId(),
+                orm.getSettlementAmount(), orm.getSettlementType(), orm.getPaidBy(), orm.getPaidTo(),
+                orm.getSettlementDate());
+    }
+
+    public static List<ExpenseSettlementRecord> expenseSettlementORMListToRecordList(List<ExpenseSettlementORM> orm) {
+        return orm.stream().map(MappingUtility::expenseSettlementORMToRecord).collect(Collectors.toList());
     }
 }
