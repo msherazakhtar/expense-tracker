@@ -23,10 +23,10 @@ public class ExpenseSettlementController {
         this.settlementService = settlementService;
     }
 
-    @PostMapping
-    public ResponseEntity<ApiResponse<ExpenseSettlementORM>> addSettlement(
+    @PostMapping("/paid")
+    public ResponseEntity<ApiResponse<ExpenseSettlementORM>> expenseSettlementPaid(
             @RequestBody ExpenseSettlementRecord record) {
-        ExpenseSettlementORM savedSettlement = settlementService.addSettlement(record);
+        ExpenseSettlementORM savedSettlement = settlementService.expenseSettlementPaid(record);
         ApiResponse<ExpenseSettlementORM> apiResponse = new ApiResponse<>(
                 "Settlement",
                 savedSettlement,

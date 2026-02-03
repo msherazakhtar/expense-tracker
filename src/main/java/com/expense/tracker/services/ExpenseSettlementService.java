@@ -4,7 +4,7 @@ import com.expense.tracker.dtos.ExpenseSettlementRecord;
 import com.expense.tracker.models.ExpenseSettlementORM;
 
 public interface ExpenseSettlementService {
-    ExpenseSettlementORM addSettlement(ExpenseSettlementRecord record);
+    ExpenseSettlementORM expenseSettlementPaid(ExpenseSettlementRecord record);
 
     // List<ExpenseSettlementORM> getSettlementsByExpenseId(Long expenseId);
 

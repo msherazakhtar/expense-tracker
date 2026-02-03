@@ -1,23 +1,39 @@
 package com.expense.tracker.services;
 
+import java.math.BigDecimal;
+
 import org.springframework.stereotype.Service;
 
 import com.expense.tracker.dtos.ExpenseSettlementRecord;
+import com.expense.tracker.models.ExpenseDetailsORM;
 import com.expense.tracker.models.ExpenseSettlementORM;
+import com.expense.tracker.repositories.ExpenseDetailsRepository;
 import com.expense.tracker.repositories.ExpenseSettlementRepository;
 import com.expense.tracker.utilities.MappingUtility;
+
+import jakarta.transaction.Transactional;
 
 @Service
 public class ExpenseSettlementServiceImpl implements ExpenseSettlementService {
 
     private final ExpenseSettlementRepository settlementRepository;
+    private final ExpenseDetailsRepository expenseDetailsRepository;
 
-    public ExpenseSettlementServiceImpl(ExpenseSettlementRepository settlementRepository) {
+    public ExpenseSettlementServiceImpl(ExpenseSettlementRepository settlementRepository,
+            ExpenseDetailsRepository expenseDetailsRepository) {
         this.settlementRepository = settlementRepository;
+        this.expenseDetailsRepository = expenseDetailsRepository;
     }
 
     @Override
-    public ExpenseSettlementORM addSettlement(ExpenseSettlementRecord record) {
+    @Transactional
+    public ExpenseSettlementORM expenseSettlementPaid(ExpenseSettlementRecord record) {
+        ExpenseDetailsORM expenseDetails = expenseDetailsRepository.findById(record.expenseDetailsId()).orElseThrow();
+        expenseDetails.setAmountToPay(expenseDetails.getAmountToPay().subtract(record.settlementAmount()));
+        if (expenseDetails.getAmountToPay().compareTo(BigDecimal.ZERO) <= 0) {
+            expenseDetails.setIsSettled(true);
+        }
+        expenseDetailsRepository.save(expenseDetails);
         return settlementRepository.save(MappingUtility.expenseSettlementRecordToORM(record));
     }
 
