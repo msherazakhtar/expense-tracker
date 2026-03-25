@@ -392,4 +392,13 @@ select * from users
 
 
 
-elect * from expense_details
+select expense_details.amount_to_pay,* from expense_details
+
+update expense_details set amount_to_pay = 33 where expense_details.expense_details_id = 11
+
+select * from expense_settlements
+
+
+
+
+
