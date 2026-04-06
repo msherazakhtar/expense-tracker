@@ -21,7 +21,8 @@ import com.expense.tracker.utilities.ApiResponseUtil;
 
 @RestController
 @RequestMapping("/group-members")
-public class GroupMembersController {
+public class
+GroupMembersController {
     private GroupMembersService groupMembersService;
 
     public GroupMembersController(GroupMembersService groupMembersService) {
@@ -38,7 +39,7 @@ public class GroupMembersController {
     }
 
     @GetMapping("/{group-id}")
-    public ResponseEntity<List<GroupMembersRecord>> getAllGroupMembers(@PathVariable Long groupId) {
+    public ResponseEntity<List<GroupMembersRecord>> getAllGroupMembers(@PathVariable(name = "group-id") Long groupId) {
         List<GroupMembersRecord> groupMembersRecord = groupMembersService.getAllGroupMembers(groupId);
         return ResponseEntity.status(HttpStatus.OK).body(groupMembersRecord);
     }

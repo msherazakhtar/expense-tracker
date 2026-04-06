@@ -38,6 +38,7 @@ public class GroupMembersORM extends GlobalFields {
         this.name = name;
         this.phone = phone;
         this.email = email;
+        this.groupId = groupId;
     }
 
     public GroupMembersORM(Long groupMemberId, String name, String email, String phone) {
