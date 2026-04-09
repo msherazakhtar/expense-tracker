@@ -1,6 +1,8 @@
 package com.expense.tracker.models;
 
 import jakarta.persistence.*;
+import jakarta.validation.groups.Default;
+
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
@@ -32,6 +34,8 @@ public class ExpenseORM {
     private String modifiedBy;
     @Column(name = "group_id")
     private Long groupId;
+    @Column(name = "expense_date")
+    private LocalDateTime expenseDate;
 
     // Getters and Setters
     public Long getId() {
@@ -138,4 +142,11 @@ public class ExpenseORM {
         this.amountPerHead = amountPerHead;
     }
 
+    public Boolean getGroup() {
+        return isGroup;
+    }
+
+    public void setGroup(Boolean group) {
+        isGroup = group;
+    }
 }

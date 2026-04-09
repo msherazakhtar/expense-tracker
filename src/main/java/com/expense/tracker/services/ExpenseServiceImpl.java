@@ -10,6 +10,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import com.expense.tracker.dtos.ExpenseDetailView;
+import com.expense.tracker.dtos.ExpenseDetailsItemView;
 import com.expense.tracker.dtos.ExpenseDetailsRecord;
 import com.expense.tracker.dtos.ExpenseRecord;
 import com.expense.tracker.dtos.SearchCriteria;
@@ -21,6 +23,7 @@ import com.expense.tracker.models.ExpenseSummaryORM;
 import com.expense.tracker.repositories.ExpenseDetailsRepository;
 import com.expense.tracker.repositories.ExpenseRepository;
 import com.expense.tracker.utilities.MappingUtility;
+import com.expense.tracker.wrappers.ExpenseDetailWrapper;
 import com.expense.tracker.wrappers.ExpenseWrapper;
 
 import jakarta.transaction.Transactional;
@@ -93,13 +96,11 @@ public class ExpenseServiceImpl implements ExpenseService {
 		String dateTo = null;
 		String category = "";
 		for (SearchCriteriaParmeters parameter : requestCriteria.getParameters()) {
-			if (parameter.getParamName().equals("dateFrom")) {
-				dateFrom = parameter.getParamValue();
-			} else if (parameter.getParamName().equals("dateTo")) {
-				dateTo = parameter.getParamValue();
-			} else if (parameter.getParamName().equals("category")) {
-				category = parameter.getParamValue();
-			}
+            switch (parameter.getParamName()) {
+                case "dateFrom" -> dateFrom = parameter.getParamValue();
+                case "dateTo" -> dateTo = parameter.getParamValue();
+                case "category" -> category = parameter.getParamValue();
+            }
 		}
 
 		return expenseRepository.getUserExpenseSummary(requestCriteria.getId(), category, dateFrom, dateTo);
@@ -116,14 +117,13 @@ public class ExpenseServiceImpl implements ExpenseService {
 	}
 
 	@Override
-	public ExpenseWrapper getExpenseById(Long expenseId) {
-		ExpenseORM expenseORM = expenseRepository.findById(expenseId).orElseThrow(
-				() -> new ExpenseNotFoundException("Expense not found..."));
-		List<ExpenseDetailsORM> expenseDetailsORM = expenseDetailsRepository.findByExpenseId(expenseId);
-		ExpenseWrapper expenseWrapper = new ExpenseWrapper();
-		expenseWrapper.setExpenseRecord(MappingUtility.expenseORMToRecord(expenseORM));
-		expenseWrapper.setExpenseDetails(MappingUtility.expenseDetailsORMListToRecordList(expenseDetailsORM));
-		return expenseWrapper;
+	public ExpenseDetailWrapper getExpenseById(Long expenseId) {
+		ExpenseDetailView expense = expenseRepository.findExpenseDetailById(expenseId);
+		if (expense == null) {
+			throw new ExpenseNotFoundException("Expense not found...");
+		}
+		List<ExpenseDetailsItemView> expenseDetails = expenseDetailsRepository.findExpenseDetailsById(expenseId);
+		return new ExpenseDetailWrapper(expense, expenseDetails);
 	}
 
 }

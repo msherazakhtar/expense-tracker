@@ -26,7 +26,7 @@ public class MailConfigurationORM {
     private String mailServer;
     @Column(name = "is_active")
     private Boolean isActive;
-    @Column(name = "mail_template")
+    @Column(name = "mail_template",columnDefinition = "VARCHAR(5000)")
     private String mailTemplate;
     public Long getConfigurationId() {
         return configurationId;

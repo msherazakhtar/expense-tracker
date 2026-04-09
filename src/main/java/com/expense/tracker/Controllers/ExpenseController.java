@@ -19,6 +19,7 @@ import com.expense.tracker.dtos.SearchCriteria;
 import com.expense.tracker.enums.ResponseStatus;
 import com.expense.tracker.models.ExpenseSummaryORM;
 import com.expense.tracker.services.ExpenseService;
+import com.expense.tracker.wrappers.ExpenseDetailWrapper;
 import com.expense.tracker.wrappers.ExpenseWrapper;
 
 @RestController
@@ -56,10 +57,10 @@ public class ExpenseController {
         }
 
         @GetMapping("/{expenseId}")
-        public ResponseEntity<ExpenseWrapper> getExpenseById(
+        public ResponseEntity<ExpenseDetailWrapper> getExpenseById(
                         @PathVariable("expenseId") Long expenseId) {
-                ExpenseWrapper expenseWrapper = expenseService.getExpenseById(expenseId);
-                return ResponseEntity.status(HttpStatus.OK).body(expenseWrapper);
+                ExpenseDetailWrapper expenseDetailWrapper = expenseService.getExpenseById(expenseId);
+                return ResponseEntity.status(HttpStatus.OK).body(expenseDetailWrapper);
 
         }
 
