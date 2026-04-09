@@ -103,7 +103,8 @@ public class MappingUtility {
                 orm.getCreatedBy(),
                 orm.getIsGroup(),
                 orm.getAmountPerHead(),
-                orm.getCreatedAt());
+                orm.getCreatedAt(),
+                orm.getExpenseDate());
     }
 
     // Groups

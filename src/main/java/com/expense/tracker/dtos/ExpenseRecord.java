@@ -14,5 +14,6 @@ public record ExpenseRecord(
         String createdBy,
         Boolean isGroup,
         BigDecimal amountPerHead,
-        LocalDateTime createdAt) {
+        LocalDateTime createdAt,
+        LocalDateTime expenseDate) {
 }

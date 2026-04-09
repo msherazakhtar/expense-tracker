@@ -149,4 +149,12 @@ public class ExpenseORM {
     public void setGroup(Boolean group) {
         isGroup = group;
     }
+
+    public LocalDateTime getExpenseDate() {
+        return expenseDate;
+    }
+
+    public void setExpenseDate(LocalDateTime expenseDate) {
+        this.expenseDate = expenseDate;
+    }
 }
