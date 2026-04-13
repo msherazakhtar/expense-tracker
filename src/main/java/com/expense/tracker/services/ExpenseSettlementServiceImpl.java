@@ -29,7 +29,9 @@ public class ExpenseSettlementServiceImpl implements ExpenseSettlementService {
     @Transactional
     public ExpenseSettlementORM expenseSettlementPaid(ExpenseSettlementRecord record) {
         ExpenseDetailsORM expenseDetails = expenseDetailsRepository.findById(record.expenseDetailsId()).orElseThrow();
-        expenseDetails.setAmountToPay(expenseDetails.getAmountToPay().subtract(record.settlementAmount()));
+        BigDecimal settledAmount = expenseDetails.getAmountToPay().subtract(record.settlementAmount());
+        expenseDetails.setAmountToPay(settledAmount);
+        expenseDetails.setPendingAmount(settledAmount);
         if (expenseDetails.getAmountToPay().compareTo(BigDecimal.ZERO) <= 0) {
             expenseDetails.setIsSettled(true);
         }

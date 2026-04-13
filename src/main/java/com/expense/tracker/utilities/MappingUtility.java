@@ -88,6 +88,7 @@ public class MappingUtility {
         orm.setUserId(record.userId());
         orm.setGroupId(record.groupId());
         orm.setAmountPerHead(record.amountPerHead());
+        orm.setExpenseDate(record.expenseDate());
         return orm;
     }
 
