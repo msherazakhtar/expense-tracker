@@ -57,10 +57,10 @@ public class ExpenseServiceImpl implements ExpenseService {
 				expenseDetailsORM.setAmountToPay(BigDecimal.ZERO);
 				expenseDetailsORM.setIsSettled(true);
 			} else if (pendingAmount.compareTo(BigDecimal.ZERO) > 0) {
-				expenseDetailsORM.setAmountToGet(pendingAmount);
+				expenseDetailsORM.setAmountToGet(pendingAmount.abs());
 				expenseDetailsORM.setIsSettled(false);
 			} else if (pendingAmount.compareTo(BigDecimal.ZERO) < 0) {
-				expenseDetailsORM.setAmountToPay(pendingAmount);
+				expenseDetailsORM.setAmountToPay(pendingAmount.abs());
 				expenseDetailsORM.setIsSettled(false);
 			}
 			expenseDetailsORM.setExpenseId(expenseORM.getId());

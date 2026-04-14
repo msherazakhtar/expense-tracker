@@ -1,5 +1,8 @@
 package com.expense.tracker.Controllers;
 
+import com.expense.tracker.dtos.SearchCriteria;
+import com.expense.tracker.models.ExpenseSummaryORM;
+import com.expense.tracker.models.SettlementsSummaryORM;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -12,6 +15,8 @@ import com.expense.tracker.dtos.ExpenseSettlementRecord;
 import com.expense.tracker.enums.ResponseStatus;
 import com.expense.tracker.models.ExpenseSettlementORM;
 import com.expense.tracker.services.ExpenseSettlementService;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/settlement")
@@ -34,13 +39,13 @@ public class ExpenseSettlementController {
         return ResponseEntity.status(HttpStatus.CREATED).body(apiResponse);
     }
 
-    // @GetMapping("/expense/{expenseId}")
-    // public ResponseEntity<List<ExpenseSettlementORM>> getSettlementsByExpenseId(
-    // @PathVariable Long expenseId) {
-    // List<ExpenseSettlementORM> settlements =
-    // settlementService.getSettlementsByExpenseId(expenseId);
-    // return ResponseEntity.status(HttpStatus.OK).body(settlements);
-    // }
+    @PostMapping("/summary")
+    public ResponseEntity<List<SettlementsSummaryORM>> getSettlementSummary(
+            @RequestBody SearchCriteria requestCriteria) {
+        List<SettlementsSummaryORM> expenseSummary = settlementService.getSettlementSummary(requestCriteria);
+        return ResponseEntity.status(HttpStatus.OK).body(expenseSummary);
+
+    }
 
     // @GetMapping("/user/{userId}")
     // public ResponseEntity<List<ExpenseSettlementORM>> getSettlementsByUserId(

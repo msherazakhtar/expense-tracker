@@ -152,13 +152,15 @@ public class MappingUtility {
 
     // Expense Settlement
     public static ExpenseSettlementORM expenseSettlementRecordToORM(ExpenseSettlementRecord record) {
-        return new ExpenseSettlementORM(record.expenseSettlementId(), record.expenseId(), record.expenseDetailsId(),
+        return new ExpenseSettlementORM(record.expenseSettlementId(), record.expenseId(), record.payerExpenseDetailsId(),
+                record.receiverExpenseDetailsId(),
                 record.settlementAmount(), record.settlementType(), record.paidBy(), record.paidTo(),
                 record.settlementDate());
     }
 
     public static ExpenseSettlementRecord expenseSettlementORMToRecord(ExpenseSettlementORM orm) {
-        return new ExpenseSettlementRecord(orm.getExpenseSettlementId(), orm.getExpenseId(), orm.getExpenseDetailsId(),
+        return new ExpenseSettlementRecord(orm.getExpenseSettlementId(), orm.getExpenseId(), orm.getPayerExpenseDetailsId(),
+                orm.getReceiverExpenseDetailsId(),
                 orm.getSettlementAmount(), orm.getSettlementType(), orm.getPaidBy(), orm.getPaidTo(),
                 orm.getSettlementDate());
     }

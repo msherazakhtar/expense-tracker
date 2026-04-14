@@ -1,7 +1,12 @@
 package com.expense.tracker.services;
 
 import java.math.BigDecimal;
+import java.util.List;
 
+import com.expense.tracker.dtos.SearchCriteria;
+import com.expense.tracker.dtos.SearchCriteriaParmeters;
+import com.expense.tracker.models.ExpenseSummaryORM;
+import com.expense.tracker.models.SettlementsSummaryORM;
 import org.springframework.stereotype.Service;
 
 import com.expense.tracker.dtos.ExpenseSettlementRecord;
@@ -28,15 +33,40 @@ public class ExpenseSettlementServiceImpl implements ExpenseSettlementService {
     @Override
     @Transactional
     public ExpenseSettlementORM expenseSettlementPaid(ExpenseSettlementRecord record) {
-        ExpenseDetailsORM expenseDetails = expenseDetailsRepository.findById(record.expenseDetailsId()).orElseThrow();
-        BigDecimal settledAmount = expenseDetails.getAmountToPay().subtract(record.settlementAmount());
-        expenseDetails.setAmountToPay(settledAmount);
-        expenseDetails.setPendingAmount(settledAmount);
-        if (expenseDetails.getAmountToPay().compareTo(BigDecimal.ZERO) <= 0) {
-            expenseDetails.setIsSettled(true);
+        ExpenseDetailsORM payerExpenseDetails = expenseDetailsRepository.findById(record.payerExpenseDetailsId()).orElseThrow();
+        ExpenseDetailsORM receiverExpenseDetails = expenseDetailsRepository.findById(record.receiverExpenseDetailsId()).orElseThrow();
+
+        BigDecimal payerSettledAmount = payerExpenseDetails.getAmountToPay().subtract(record.settlementAmount());
+        BigDecimal receiverSettledAmount = receiverExpenseDetails.getAmountToGet().subtract(record.settlementAmount());
+        payerExpenseDetails.setAmountToPay(payerSettledAmount);
+        payerExpenseDetails.setPendingAmount(payerSettledAmount);
+        if (payerExpenseDetails.getPendingAmount().compareTo(BigDecimal.ZERO) <= 0) {
+            payerExpenseDetails.setIsSettled(true);
         }
-        expenseDetailsRepository.save(expenseDetails);
+        expenseDetailsRepository.save(payerExpenseDetails);
+        receiverExpenseDetails.setPendingAmount(receiverSettledAmount);
+        receiverExpenseDetails.setAmountToGet(receiverSettledAmount);
+        if (receiverExpenseDetails.getPendingAmount().compareTo(BigDecimal.ZERO) <= 0) {
+            payerExpenseDetails.setIsSettled(true);
+        }
+        expenseDetailsRepository.save(receiverExpenseDetails);
         return settlementRepository.save(MappingUtility.expenseSettlementRecordToORM(record));
+    }
+
+    @Override
+    public List<SettlementsSummaryORM> getSettlementSummary(SearchCriteria requestCriteria) {
+        String dateFrom = null;
+        String dateTo = null;
+        String category = "";
+        for (SearchCriteriaParmeters parameter : requestCriteria.getParameters()) {
+            switch (parameter.getParamName()) {
+                case "dateFrom" -> dateFrom = parameter.getParamValue();
+                case "dateTo" -> dateTo = parameter.getParamValue();
+                case "category" -> category = parameter.getParamValue();
+            }
+        }
+
+        return settlementRepository.getExpenseSettlementSummary(requestCriteria.getId(), dateFrom, dateTo);
     }
 
     // @Override
