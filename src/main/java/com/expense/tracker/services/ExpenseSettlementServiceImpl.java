@@ -47,7 +47,7 @@ public class ExpenseSettlementServiceImpl implements ExpenseSettlementService {
         receiverExpenseDetails.setPendingAmount(receiverSettledAmount);
         receiverExpenseDetails.setAmountToGet(receiverSettledAmount);
         if (receiverExpenseDetails.getPendingAmount().compareTo(BigDecimal.ZERO) <= 0) {
-            payerExpenseDetails.setIsSettled(true);
+            receiverExpenseDetails.setIsSettled(true);
         }
         expenseDetailsRepository.save(receiverExpenseDetails);
         return settlementRepository.save(MappingUtility.expenseSettlementRecordToORM(record));
