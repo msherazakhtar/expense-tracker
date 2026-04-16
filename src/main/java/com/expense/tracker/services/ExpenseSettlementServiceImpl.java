@@ -40,13 +40,13 @@ public class ExpenseSettlementServiceImpl implements ExpenseSettlementService {
         BigDecimal receiverSettledAmount = receiverExpenseDetails.getAmountToGet().subtract(record.settlementAmount());
         payerExpenseDetails.setAmountToPay(payerSettledAmount);
         payerExpenseDetails.setPendingAmount(payerSettledAmount);
-        if (payerExpenseDetails.getPendingAmount().compareTo(BigDecimal.ZERO) <= 0) {
+        if (payerExpenseDetails.getPendingAmount().compareTo(BigDecimal.ZERO) < 1) {
             payerExpenseDetails.setIsSettled(true);
         }
         expenseDetailsRepository.save(payerExpenseDetails);
         receiverExpenseDetails.setPendingAmount(receiverSettledAmount);
         receiverExpenseDetails.setAmountToGet(receiverSettledAmount);
-        if (receiverExpenseDetails.getPendingAmount().compareTo(BigDecimal.ZERO) <= 0) {
+        if (receiverExpenseDetails.getPendingAmount().compareTo(BigDecimal.ZERO) <1) {
             receiverExpenseDetails.setIsSettled(true);
         }
         expenseDetailsRepository.save(receiverExpenseDetails);

@@ -2,6 +2,7 @@ package com.expense.tracker.services;
 
 import java.util.List;
 
+import com.expense.tracker.dtos.projection.GroupSummaryProjection;
 import org.springframework.stereotype.Service;
 
 import com.expense.tracker.dtos.GroupRecord;
@@ -27,7 +28,7 @@ public class GroupsServiceImpl implements GroupsService {
     }
 
     @Override
-    public List<GroupRecord> getGroupByUserId(Long userId) {
+    public List<GroupSummaryProjection> getGroupByUserId(Long userId) {
         System.out.println("execute grou by id");
         return groupsRepository.findGroupsByUserId(userId);
         // List<GroupsORM> groupsList = groupsRepository.findGroupsByUserId(userId);

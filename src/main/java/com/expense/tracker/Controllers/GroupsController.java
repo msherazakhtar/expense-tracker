@@ -2,6 +2,7 @@ package com.expense.tracker.Controllers;
 
 import java.util.List;
 
+import com.expense.tracker.dtos.projection.GroupSummaryProjection;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -35,8 +36,8 @@ public class GroupsController {
     }
 
     @GetMapping
-    public ResponseEntity<List<GroupRecord>> getGroupByUserId(@RequestParam Long userId) {
-        List<GroupRecord> groupRecord = groupsService.getGroupByUserId(userId);
+    public ResponseEntity<List<GroupSummaryProjection>> getGroupByUserId(@RequestParam Long userId) {
+        List<GroupSummaryProjection> groupRecord = groupsService.getGroupByUserId(userId);
         return ResponseEntity.status(HttpStatus.OK).body(groupRecord);
     }
 

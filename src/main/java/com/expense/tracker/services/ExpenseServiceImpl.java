@@ -42,15 +42,22 @@ public class ExpenseServiceImpl implements ExpenseService {
 	@Transactional
 	public ExpenseWrapper addExpense(ExpenseWrapper saveExpenseWrapper) {
 		ExpenseORM expenseORM = MappingUtility.expenseRecordToORM(saveExpenseWrapper.getExpenseRecord());
-		BigDecimal amountPerPerson = saveExpenseWrapper.getExpenseRecord().amount()
-				.divide(BigDecimal.valueOf(saveExpenseWrapper.getExpenseDetails().size()), 2, RoundingMode.HALF_UP);
+		BigDecimal totalAmount = saveExpenseWrapper.getExpenseRecord().amount();
+		int memberCount = saveExpenseWrapper.getExpenseDetails().size();
+		// Truncate (floor) so per-person shares never exceed the total
+		BigDecimal amountPerPerson = totalAmount.divide(BigDecimal.valueOf(memberCount), 2, RoundingMode.DOWN);
+		// The last member absorbs any leftover cents (e.g. 800/3 → 266.66 instead of 266.67)
+		BigDecimal lastMemberShare = totalAmount.subtract(amountPerPerson.multiply(BigDecimal.valueOf(memberCount - 1)));
 		expenseORM.setAmountPerHead(amountPerPerson);
 		expenseORM = expenseRepository.save(expenseORM);
 
 		List<ExpenseDetailsRecord> savedExpenseDetails = new ArrayList<>();
-		for (ExpenseDetailsRecord expenseDetail : saveExpenseWrapper.getExpenseDetails()) {
+		List<ExpenseDetailsRecord> expenseDetailsList = saveExpenseWrapper.getExpenseDetails();
+		for (int i = 0; i < expenseDetailsList.size(); i++) {
+			ExpenseDetailsRecord expenseDetail = expenseDetailsList.get(i);
+			BigDecimal share = (i == expenseDetailsList.size() - 1) ? lastMemberShare : amountPerPerson;
 			ExpenseDetailsORM expenseDetailsORM = MappingUtility.expenseDetailsRecordToORM(expenseDetail);
-			expenseDetailsORM.setPendingAmount(expenseDetailsORM.getPaidAmount().subtract(amountPerPerson));
+			expenseDetailsORM.setPendingAmount(expenseDetailsORM.getPaidAmount().subtract(share));
 			BigDecimal pendingAmount = expenseDetailsORM.getPendingAmount();
 			if (pendingAmount.compareTo(BigDecimal.ZERO) == 0) {
 				expenseDetailsORM.setAmountToGet(BigDecimal.ZERO);

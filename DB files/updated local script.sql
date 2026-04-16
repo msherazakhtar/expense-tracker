@@ -436,52 +436,30 @@ select * from expense_details where expense_id = 4
 update expenses set is_deleted =  true
 
 
-
-
-select * from expense_settlements limit 1;
-select * from group_members limit 1;
-select * from groups limit 1
-
-alter table expense_settlements
-add receiver_expense_detail_id bigint
-
-ALTER TABLE expense_settlements RENAME COLUMN expense_details_id TO payer_expense_detail_id;
-
-Select distinct es.expense_settlement_id,es.settlement_date,mp.name paid_by,mr.name paid_to,g.name group_name,es.settlement_amount
-from expense_settlements es
-join group_members mp on mp.group_member_id = es.paid_by
-join group_members mr on mr.group_member_id = es.paid_to 
-join groups g on g.group_id = mp.group_id 
-where Date(es.settlement_date) between date('2025-06-01') and date('2026-06-06') 
-and coalesce(es.is_deleted,false) <> true and g.user_id = 1
-order by es.settlement_date
-
-
-
 select * from expense_settlements
 
 
 
+alter table expense_settlements
+add receiver_expense_detail_id 
 
 
 
 
+select * from groups
+
+select * from group_members
+
+
+select * from expense_details where expense_id = 28
+
+
+select * from users
+update users set email = 'sherazakhtarmalik@gmail.com' where email = 'sherazakhtarmaliK@gmail.com'
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
+select * from expense_details
 
 
 
