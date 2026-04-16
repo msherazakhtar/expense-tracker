@@ -22,14 +22,17 @@ public class SettlementsSummaryORM {
     private String groupName;
     @Column(name = "settlement_amount")
     private BigDecimal settlementAmount;
+    @Column(name = "expense_title")
+    private String expenseTitle;
 
-    public SettlementsSummaryORM(Long expenseSettlementId, LocalDate settlementDate, String paidBy, String paidTo, String groupName, BigDecimal settlementAmount) {
+    public SettlementsSummaryORM(Long expenseSettlementId, LocalDate settlementDate, String paidBy, String paidTo, String groupName, BigDecimal settlementAmount,String expenseTitle) {
         this.expenseSettlementId = expenseSettlementId;
         this.settlementDate = settlementDate;
         this.paidBy = paidBy;
         this.paidTo = paidTo;
         this.groupName = groupName;
         this.settlementAmount = settlementAmount;
+        this.expenseTitle = expenseTitle;
     }
 
     public SettlementsSummaryORM() {
@@ -81,5 +84,13 @@ public class SettlementsSummaryORM {
 
     public void setSettlementAmount(BigDecimal settlementAmount) {
         this.settlementAmount = settlementAmount;
+    }
+
+    public String getExpenseTitle() {
+        return expenseTitle;
+    }
+
+    public void setExpenseTitle(String expenseTitle) {
+        this.expenseTitle = expenseTitle;
     }
 }
