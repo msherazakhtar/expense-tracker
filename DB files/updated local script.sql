@@ -459,22 +459,64 @@ update users set email = 'sherazakhtarmalik@gmail.com' where email = 'sherazakht
 
 
 
-select * from expense_details
+select * from expense_details order by 1 desc
+
+select * from expense_settlements
+
+
+select * from expenses
+select * from groups
+SELECT 
+    g.group_id,
+    g.name,
+    g.user_id,
+    g.date_created,
+    g.created_by,
+    g.date_modified,
+    g.modified_by,
+    COALESCE(e.total_expense, 0)  AS total_expense,
+    COALESCE(m.total_members, 0)  AS total_members
+FROM groups g
+
+LEFT JOIN (
+    SELECT group_id, SUM(amount) AS total_expense
+    FROM expenses
+    WHERE is_deleted = false
+    GROUP BY group_id
+) e ON e.group_id = g.group_id
+
+LEFT JOIN (
+    SELECT group_id, COUNT(*) AS total_members
+    FROM group_members
+    WHERE is_deleted = false
+    GROUP BY group_id
+) m ON m.group_id = g.group_id
+
+WHERE g.user_id = 2
+  AND g.is_deleted = false
+ORDER BY g.date_created DESC;
 
 
 
 
+select * from expense_details where expense_id = 42
+
+
+ Select distinct es.expense_settlement_id,es.settlement_date,mp.name paid_by,
+            mr.name paid_to,g.name group_name,es.settlement_amount,e.title
+            from expense_settlements es
+            join group_members mp on mp.group_member_id = es.paid_by
+            join group_members mr on mr.group_member_id = es.paid_to
+            join groups g on g.group_id = mp.group_id
+            join expenses e on e.expense_id = es.expense_id
+            where 
+             coalesce(es.is_deleted,false) = false and g.user_id = 2
+            order by es.settlement_date desc
+
+select * from group_members where group_id = 11
 
 
 
-
-
-
-
-
-
-
-
-
+select * from users
 
 
