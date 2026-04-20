@@ -514,9 +514,72 @@ select * from expense_details where expense_id = 42
             order by es.settlement_date desc
 
 select * from group_members where group_id = 11
-
-
-
 select * from users
+
+Select * from expenses
+
+Select g.group_id,g.name,Sum(e.amount),
+(select count(group_member_id) from group_members where group_id = g.group_id AND is_deleted = false)total_members
+from expenses e
+join groups g on g.group_id = e.group_id
+left join group_members gm on gm.group_id = g.group_id AND gm.is_deleted = false
+where e.is_deleted = false and Date(e.expense_date) BETWEEN Date(start_date) AND Date(end_date) 
+and g.group_id = group_id or group_id = ''
+group by g.group_id,g.name
+
+
+select * from group_members where group_id = 2 AND is_deleted = false
+SELECT column_name, data_type 
+FROM information_schema.columns 
+WHERE table_name = 'expenses' 
+AND column_name = 'expense_date';
+
+
+
+
+
+Select e.user_id,g.group_id,g.name,Sum(e.amount),
+(select count(group_member_id) from group_members where group_id = g.group_id AND is_deleted = false)total_members
+from expenses e
+join groups g on g.group_id = e.group_id
+left join group_members gm on gm.group_id = g.group_id AND gm.is_deleted = false
+where e.is_deleted = false and Date(e.expense_date) BETWEEN Date('01-01-2026') AND Date('06-12-2026') 
+group by e.user_id,g.group_id,g.name
+
+
+
+Select e.user_id,g.group_id,g.name,Sum(e.amount),
+Cast((select count(group_member_id) from group_members where group_id = g.group_id AND is_deleted = false) as integer)total_members
+from expenses e
+join groups g on g.group_id = e.group_id
+left join group_members gm on gm.group_id = g.group_id AND gm.is_deleted = false
+where e.is_deleted = false and Date(e.expense_date) BETWEEN Date('01-01-2026') AND Date('06-12-2026') 
+
+group by e.user_id,g.group_id,g.name
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
