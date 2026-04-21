@@ -27,6 +27,11 @@ import com.expense.tracker.wrappers.ExpenseWrapper;
 public class ExpenseController {
         @Autowired
         ExpenseService expenseService;
+        @GetMapping("/sync")
+        public  Boolean sync()
+        {
+                return true;
+        }
 
         @PostMapping
         public ResponseEntity<ApiResponse<ExpenseWrapper>> addExpense(
