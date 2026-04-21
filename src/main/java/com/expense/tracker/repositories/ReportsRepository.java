@@ -32,7 +32,7 @@ public class ReportsRepository {
         for (SearchCriteriaParmeters parameter : requestCriteria.getParameters()) {
             switch (parameter.getParamName()) {
                 case "dateFrom" -> paramMap.put("dateFrom", parameter.getParamValue());
-                case "date  To" -> paramMap.put("dateTo", parameter.getParamValue());
+                case "dateTo" -> paramMap.put("dateTo", parameter.getParamValue());
                 case "groupId" -> paramMap.put("groupId", parameter.getParamValue());
 
             }
@@ -50,7 +50,7 @@ public class ReportsRepository {
                 case "groupId" -> paramMap.put("groupId", parameter.getParamValue());
             }
         }
-        return new MonthlyReportDetailsWrapper(fetchMonthlyExpenseDetails(paramMap),fetchMonthlyExpenseSplitDetails(paramMap));
+        return new MonthlyReportDetailsWrapper(fetchMonthlyExpenseDetails(paramMap), fetchMonthlyExpenseSplitDetails(paramMap));
     }
 
     private List<MonthlyExpenseDetail> fetchMonthlyExpenseDetails(Map<String, Object> params) {
