@@ -558,6 +558,26 @@ where e.is_deleted = false and Date(e.expense_date) BETWEEN Date('01-01-2026') A
 group by e.user_id,g.group_id,g.name
 
 
+Select g.group_id,g.name group_name,Sum(e.amount) total_expense, 
+Cast((select count(group_member_id) from group_members where group_id = g.group_id AND is_deleted = false) as Integer)total_members
+from expenses e
+join groups g on g.group_id = e.group_id 
+join group_members gm on gm.group_id = g.group_id AND gm.is_deleted = false 
+where e.is_deleted = false and Date(e.expense_date) BETWEEN Date('03-31-2026') AND Date('04-29-2026') and e.user_id = 2
+and g.is_deleted = false--and (CAST(e.group_id AS VARCHAR) =  or :groupId = '-1')  
+group by g.group_id,g.name
+
+select * from groups where is_deleted = false
+select * from users
+
+
+
+Select * from expense_settlements
+
+Select * from expenses limit 1
+Select * from expense_details limit 1
+Select * from groups limit 1
+select * from group_members limit 1
 
 
 
@@ -566,18 +586,87 @@ group by e.user_id,g.group_id,g.name
 
 
 
+-- ============================================================
+-- BARABAR: Group Expense Report
+-- Params: :group_id, :start_date, :end_date
+-- ============================================================
 
+-- 1. SUMMARY: Total amount & amount per head for the period
+SELECT
+    g.name                          AS group_name,
+    COUNT(DISTINCT e.expense_id)    AS total_expenses,
+    SUM(e.amount)                   AS total_amount,
+    AVG(e.amount_per_head)          AS avg_amount_per_head,
+    SUM(e.amount_per_head)          AS total_per_head
+FROM expenses e
+JOIN groups g ON g.group_id = e.group_id
+WHERE e.group_id   = 5
+  AND e.is_deleted = false
+  AND Date(e.expense_date) BETWEEN Date('03-31-2026') AND Date('04-29-2026')
+GROUP BY g.name;
 
+select * from expenses
+-- 2. EXPENSE BREAKDOWN: Each expense with per-member split
+SELECT
+    e.expense_id,
+    e.title,
+    e.category,
+    e.expense_date,
+    e.amount                        AS total_amount,
+    e.amount_per_head,
+    gm.name                         AS member_name,
+    ed.is_settled
+FROM expenses e
+JOIN expense_details ed  ON ed.expense_id      = e.expense_id
+JOIN group_members gm    ON gm.group_member_id = ed.group_member_id
+WHERE e.group_id    =5
+  AND e.is_deleted  = false
+  AND COALESCE (ed.is_deleted,false) = false
+  AND Date(e.expense_date) BETWEEN Date('03-31-2026') AND Date('04-29-2026')
+ORDER BY e.expense_date, e.expense_id, gm.name;
 
-
-
-
-
-
-
-
-
-
+select * from expenses where group_id = 16
+select * from expense_details where expense_id = 45
+select * from group_members where group_id =16
+-- 3. WHO OWES WHOM: Net balance per member for the period
+WITH member_balances AS (
+    SELECT
+        gm.group_member_id,
+        gm.name                         AS member_name,
+        gm.email,
+        -- What they are owed by others (they paid on behalf)
+        COALESCE(SUM(ed.amount_to_get), 0) AS total_to_receive,
+        -- What they owe to others
+        COALESCE(SUM(ed.amount_to_pay), 0) AS total_to_pay,
+        -- Net: positive = others owe them, negative = they owe others
+        COALESCE(SUM(ed.amount_to_get), 0)
+            - COALESCE(SUM(ed.amount_to_pay), 0) AS net_balance,
+        -- Unsettled only
+        COALESCE(SUM(CASE WHEN ed.is_settled = false THEN ed.pending_amount ELSE 0 END), 0)
+            AS total_pending
+    FROM group_members gm
+    JOIN expense_details ed ON ed.group_member_id = gm.group_member_id
+    JOIN expenses e          ON e.expense_id       = ed.expense_id
+    WHERE e.group_id    = 9
+      AND e.is_deleted  = false
+      AND COALESCE (ed.is_deleted,false) = false
+      AND Date(e.expense_date) BETWEEN Date('03-31-2026') AND Date('04-29-2026')
+    GROUP BY gm.group_member_id, gm.name, gm.email
+)
+SELECT
+    member_name,
+    email,
+    total_to_receive,
+    total_to_pay,
+    total_pending,
+    net_balance,
+    CASE
+        WHEN net_balance > 0 THEN 'Gets back ' || net_balance::TEXT
+        WHEN net_balance < 0 THEN 'Owes '      || ABS(net_balance)::TEXT
+        ELSE 'Settled up'
+    END AS status_label
+FROM member_balances
+ORDER BY net_balance DESC;
 
 
 
