@@ -17,6 +17,8 @@ public class ExpenseSummaryORM {
     private String groupName;
     @Column(name = "expense_date")
     private String expenseDate;
+    @Column(name = "total_pages")
+    private String totalPages;
 
     public Long getExpenseId() {
         return expenseId;
@@ -72,5 +74,13 @@ public class ExpenseSummaryORM {
 
     public void setExpenseDate(String expenseDate) {
         this.expenseDate = expenseDate;
+    }
+
+    public String getTotalPages() {
+        return totalPages;
+    }
+
+    public void setTotalPages(String totalPages) {
+        this.totalPages = totalPages;
     }
 }

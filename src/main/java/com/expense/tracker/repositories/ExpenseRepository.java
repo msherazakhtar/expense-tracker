@@ -31,7 +31,8 @@ public interface ExpenseRepository extends JpaRepository<ExpenseORM, Long> {
             e.amount,
             e.category,
             g.name AS group_name,
-            e.expense_date
+            e.expense_date,
+            CEIL(COUNT(*) OVER()::float /:pageSize) AS total_pages 
             FROM expenses e
             LEFT JOIN groups g ON g.group_id = e.group_id
             WHERE e.user_id = :userId
@@ -39,11 +40,18 @@ public interface ExpenseRepository extends JpaRepository<ExpenseORM, Long> {
             AND DATE(e.expense_date) BETWEEN DATE(:startDate) AND DATE(:endDate)
             AND e.is_deleted = false
             ORDER BY e.date_created DESC
+            Limit :pageSize
+            OFFSET(:pageNumber - 1) * :pageSize
             """, nativeQuery = true)
     List<ExpenseSummaryORM> getUserExpenseSummary(
             @Param("userId") Long userId,
             @Param("category") String category,
             @Param("startDate") String startDate,
-            @Param("endDate") String endDate);
+            @Param("endDate") String endDate,
+            @Param("pageNumber") Integer pageNumber,
+            @Param("pageSize") Integer pageSize
+
+    );
+
 
 }

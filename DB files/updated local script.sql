@@ -669,6 +669,16 @@ FROM member_balances
 ORDER BY net_balance DESC;
 
 
+Select g.group_id,g.name group_name,Sum(e.amount) total_expense, 
+Cast((select count(group_member_id) from group_members where group_id = g.group_id AND is_deleted = false) as Integer)total_members
+from expenses e
+join groups g on g.group_id = e.group_id 
+join group_members gm on gm.group_id = g.group_id AND gm.is_deleted = false 
+where e.is_deleted = false and Date(e.expense_date) BETWEEN Date('03-31-2026') AND Date('04-29-2026') and e.user_id = 1
+and g.is_deleted = false--and (CAST(e.group_id AS VARCHAR) =  or :groupId = '-1')  
+group by g.group_id,g.name
+
+
 
 
 

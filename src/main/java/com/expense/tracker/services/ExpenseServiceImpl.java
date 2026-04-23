@@ -102,15 +102,20 @@ public class ExpenseServiceImpl implements ExpenseService {
 		String dateFrom = null;
 		String dateTo = null;
 		String category = "";
+		Integer pageNumber= 1;
+		Integer pageSize = 10;
 		for (SearchCriteriaParmeters parameter : requestCriteria.getParameters()) {
             switch (parameter.getParamName()) {
                 case "dateFrom" -> dateFrom = parameter.getParamValue();
                 case "dateTo" -> dateTo = parameter.getParamValue();
                 case "category" -> category = parameter.getParamValue();
-            }
+				case "pageNumber" -> pageNumber = Integer.parseInt(parameter.getParamValue());
+				case "pageSize" -> pageSize = Integer.parseInt(parameter.getParamValue());
+
+			}
 		}
 
-		return expenseRepository.getUserExpenseSummary(requestCriteria.getId(), category, dateFrom, dateTo);
+		return expenseRepository.getUserExpenseSummary(requestCriteria.getId(), category, dateFrom, dateTo,pageNumber,pageSize);
 	}
 
 	@Override
